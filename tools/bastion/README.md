@@ -42,3 +42,4 @@ go get
 - https://github.com/LordNoteworthy/al-khaser?tab=readme-ov-file#antivm
 - https://unprotect.it/category/sandbox-evasion/
 - https://hackmag.com/security/malware-sandbox/
+- https://medium.com/@R00tendo/dll-creation-and-injection-with-golang-708a302a1120 

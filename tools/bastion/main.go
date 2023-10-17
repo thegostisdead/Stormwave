@@ -121,6 +121,8 @@ func Exists(name string) (bool, error) {
 	return false, err
 }
 
+// TODO https://github.com/addi00000/empyrean/blob/main/src/components/antidebug.py
+
 // detect sandboxes
 func isEnvSandbox() bool {
 
