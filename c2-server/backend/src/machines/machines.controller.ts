@@ -6,8 +6,6 @@ import { UpdateMachineDto } from './dto/update-machine.dto';
 @Controller('machines')
 export class MachinesController {
   constructor(private readonly machinesService: MachinesService) {}
-
-
   @Post('/:id/command')
   addCommand(@Param() params: string) {}
 
