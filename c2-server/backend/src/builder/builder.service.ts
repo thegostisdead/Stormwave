@@ -21,7 +21,7 @@ export class BuilderService {
     async build(info: MachineInfo) {
 
         // TODO before run the command we need to check if the machine public ip not a anti virus ip or weird ip
-        if (await this.blacklistedIpRepository.findOne({ ip: info.publicIp })) {
+        if (await this.blacklistedIpRepository.findOne({ where : { ip: info.publicIp }})) {
             console.warn(`ip ${info.publicIp} is blacklisted`)
         }
 

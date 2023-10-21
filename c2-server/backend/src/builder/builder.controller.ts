@@ -2,6 +2,7 @@ import {Body, Controller, Delete, Param, Post} from '@nestjs/common';
 import {BuilderService} from "./builder.service";
 import {MachineInfoDto} from "./dto/machine-info.dto";
 import {CreateBlacklistEntryDto} from "./dto/create-blacklist-entry.dto";
+import {MachineInfo} from "./machine.interface";
 
 @Controller('builder')
 export class BuilderController {
@@ -11,7 +12,8 @@ export class BuilderController {
 
     @Post("/build")
     build(@Body() machineInfo: MachineInfoDto) {
-        return this.builderService.build(machineInfo)
+        const data = machineInfo as MachineInfo
+        return this.builderService.build(data)
     }
 
     @Post("/blacklist")

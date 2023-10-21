@@ -9,7 +9,7 @@ export class MachineInfoDto {
     uuid: string;
 
     @IsNotEmpty()
-    privateIp: string;
+    publicIp: string;
 
     @IsNotEmpty()
     platform: string;
