@@ -1,9 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateMachineDto } from './dto/create-machine.dto';
 import { UpdateMachineDto } from './dto/update-machine.dto';
 import { DeepPartial, Repository } from 'typeorm';
 import { Machine } from '../entities/machine.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 @Injectable()
 export class MachinesService {

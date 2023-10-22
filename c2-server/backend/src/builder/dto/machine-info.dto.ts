@@ -1,19 +1,18 @@
-import { IsEmail, IsNotEmpty } from 'class-validator';
+import { IsNotEmpty } from 'class-validator';
 
 export class MachineInfoDto {
+  @IsNotEmpty()
+  username: string;
 
-    @IsNotEmpty()
-    username: string;
+  @IsNotEmpty()
+  uuid: string;
 
-    @IsNotEmpty()
-    uuid: string;
+  @IsNotEmpty()
+  publicIp: string;
 
-    @IsNotEmpty()
-    publicIp: string;
+  @IsNotEmpty()
+  platform: string;
 
-    @IsNotEmpty()
-    platform: string;
-
-    @IsNotEmpty()
-    arch: 'x64' | 'x86';
+  @IsNotEmpty()
+  arch: 'x64' | 'x86';
 }

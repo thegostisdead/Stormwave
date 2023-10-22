@@ -1,9 +1,7 @@
-import { IsIP, IsNotEmpty} from 'class-validator';
+import { IsIP, IsNotEmpty } from 'class-validator';
 
 export class CreateBlacklistEntryDto {
-
-    @IsNotEmpty()
-    @IsIP()
-    ip: string;
-
+  @IsNotEmpty()
+  @IsIP()
+  ip: string;
 }
