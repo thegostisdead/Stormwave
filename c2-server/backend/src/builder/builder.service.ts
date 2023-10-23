@@ -7,6 +7,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { Repository } from 'typeorm';
 import { BlacklistedIp } from '../entities/backlisted-ip.entity';
+import { createHmac } from 'node:crypto';
+import { UrlRegistry } from '../entities/url-registry.entity';
+const SECRET = 'secret';
 
 @Injectable()
 export class BuilderService {
@@ -15,6 +18,8 @@ export class BuilderService {
     @InjectQueue('build') private buildQueue: Queue,
     @InjectRepository(BlacklistedIp)
     private blacklistedIpRepository: Repository<BlacklistedIp>,
+    @InjectRepository(UrlRegistry)
+    private urlRegistryRepository: Repository<UrlRegistry>,
   ) {}
 
   async build(info: MachineInfo) {
@@ -27,9 +32,13 @@ export class BuilderService {
     //   console.warn(`ip ${info.publicIp} is blacklisted`);
     // }
 
+    const dropperId = createHmac('sha256', SECRET)
+      .update('${info.publicIp}${info.uuid}')
+      .digest('hex');
+
     await this.buildQueue.add('build-job', {
       machineData: info,
-      rootDir: this.configService.get('rootDir'),
+      dropperId,
     });
   }
 
