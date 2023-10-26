@@ -38,9 +38,11 @@ export class BuildConsumer {
 
     const isWin = process.platform === 'win32';
 
-    const scriptName = isWin ? 'build.bat' : 'build.sh';
+    const projectRoot = this.configService.get<string>('rootDir');
 
-    const scriptRoot = this.configService.get<string>('rootDir');
+    const scriptName = isWin ? 'build.bat ${projectRoot}' : `build.sh ${projectRoot}`;
+
+    const scriptRoot = this.configService.get<string>('scriptCompile');
 
     const archMapper = {
       x64: 'amd64',
