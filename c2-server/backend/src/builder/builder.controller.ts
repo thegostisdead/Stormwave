@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { BuilderService } from './builder.service';
 import { MachineInfoDto } from './dto/machine-info.dto';
 import { CreateBlacklistEntryDto } from './dto/create-blacklist-entry.dto';
@@ -14,9 +14,11 @@ export class BuilderController {
     return this.builderService.build(data);
   }
 
+  @Get('/get-binary/:dropperId')
   @Post('/blacklist')
-  addBlackListEntry(@Body() ip: CreateBlacklistEntryDto) {
-    return this.builderService.createBlacklist(ip.ip);
+  addBlackListEntry(@Param('dropperId') dropperId: string) {
+    const url = this.builderService.getBinaryFile(dropperId);
+    return { url };
   }
 
   @Delete('/blacklist/:ip')

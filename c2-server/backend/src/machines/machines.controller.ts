@@ -14,16 +14,16 @@ import {
 export class MachinesController {
   constructor(private readonly machinesService: MachinesService) {}
   @Post('/:id/command')
-  addCommand(@Param() params: string) {}
+  addCommand(@Param('id') params: string) {}
 
   @Get('/:id/command')
-  getCommand(@Param() params: string) {}
+  getCommand(@Param('id') params: string) {}
 
   @Post('/:id/command/ack')
-  acknowledgeCommand(@Param() params: string) {}
+  acknowledgeCommand(@Param('id') params: string) {}
 
   @Post('/:id/modules')
-  updateModulesData(@Param() params: string) {}
+  updateModulesData(@Param('id') params: string) {}
 
   @Post()
   create(@Body() createMachineDto: CreateMachineDto) {

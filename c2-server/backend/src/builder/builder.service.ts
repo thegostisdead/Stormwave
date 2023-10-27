@@ -40,6 +40,20 @@ export class BuilderService {
       machineData: info,
       dropperId,
     });
+
+    return { dropperId };
+  }
+
+  async getBinaryFile(dropperId: string) {
+    const url = await this.urlRegistryRepository.findOne({
+      where: { dropperId },
+    });
+
+    if (!url) {
+      throw new Error('Dropper not found');
+    }
+
+    return url.url;
   }
 
   async createBlacklist(ip: string) {
