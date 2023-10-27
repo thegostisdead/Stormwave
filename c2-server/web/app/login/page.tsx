@@ -3,7 +3,8 @@ import {Card, CardHeader, CardBody, CardFooter, Divider, Spacer} from "@nextui-o
 import {Input} from "@nextui-org/input";
 import {Button} from "@nextui-org/button";
 import {useState} from "react";
-
+import { signIn } from "next-auth/react";
+import {useSearchParams, useRouter} from "next/navigation";
 export default function Login() {
 
 	const [username, setUsername] = useState("");
@@ -11,10 +12,36 @@ export default function Login() {
 	const [error, setError] = useState("");
 	const [loading, setLoading] = useState(false);
 
-	function login() {
+	const searchParams = useSearchParams();
+	const callbackUrl = searchParams.get("callbackUrl") || "/profile";
+	const router = useRouter();
+
+	async function login() {
 		console.log("Logging in with username: " + username + " and password: " + password);
 		setLoading(true);
-		// TODO: Login logic here
+
+		try {
+
+			const res = await signIn("credentials", {
+				redirect: false,
+				email: username,
+				password: password,
+				callbackUrl,
+			});
+
+			console.log(res);
+			if (!res?.error) {
+				router.push(callbackUrl);
+			} else {
+				setError("invalid email or password");
+			}
+
+		} catch (error) {
+
+			setLoading(false);
+			setError(error as string);
+		}
+
 		setLoading(false)
 	}
 
