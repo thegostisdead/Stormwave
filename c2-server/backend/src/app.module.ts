@@ -8,6 +8,9 @@ import { ConfigModule } from '@nestjs/config';
 
 import { BuilderModule } from './builder/builder.module';
 import { BullModule } from '@nestjs/bull';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
+
 import * as process from 'process';
 
 import configuration from './config/configuration';
@@ -41,6 +44,8 @@ import configuration from './config/configuration';
     }),
     MachinesModule,
     BuilderModule,
+    AuthModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
