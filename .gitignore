@@ -251,3 +251,5 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+
+tools/api-simulator/.idea/
