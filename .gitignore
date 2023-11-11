@@ -255,3 +255,7 @@ venv.bak/
 tools/api-simulator/.idea/
 
 tools/api-simulator/current.json
+
+malware/stormwave/.idea/
+
+c2-server/web/.idea/
