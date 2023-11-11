@@ -253,3 +253,5 @@ env.bak/
 venv.bak/
 
 tools/api-simulator/.idea/
+
+tools/api-simulator/current.json
