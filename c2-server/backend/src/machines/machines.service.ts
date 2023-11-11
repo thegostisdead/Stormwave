@@ -4,6 +4,7 @@ import { DeepPartial, Repository } from 'typeorm';
 import { Machine } from '../entities/machine.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { Command } from '../interfaces/Command';
 
 @Injectable()
 export class MachinesService {
@@ -55,4 +56,18 @@ export class MachinesService {
     const machine = await this.findOne(id);
     await this.machinesRepository.remove(machine);
   }
+
+  async getCommand(id: string): Promise<Command> {
+    const machine = await this.findOne(+id);
+    return machine.commands[0];
+  }
+
+  async addCommand(id: string, command: Command) {
+    const machine = await this.findOne(+id);
+    machine.commands.push(command);
+    return await this.machinesRepository.save(machine);
+  }
+
+  async acknowledgeCommand() {}
+  async updateModulesData() {}
 }
