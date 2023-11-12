@@ -1,12 +1,20 @@
 [
   {
-    "userId": 1,
+    "id": 1,
     "username": "john",
-    "password": "changeme"
+    "password": "changeme",
+    "role": "OPERATOR",
+    "name": "string",
+    "email": "string",
+    "image": "string"
   },
   {
-    "userId": 2,
+    "id": 2,
     "username": "maria",
-    "password": "guess"
+    "password": "guess",
+    "role": "OPERATOR",
+    "name": "string",
+    "email": "string",
+    "image": "string"
   }
 ]

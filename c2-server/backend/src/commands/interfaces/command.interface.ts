@@ -1,4 +1,4 @@
-export interface Command {
+export interface CommandInterface {
   id: number;
   date: Date;
   executed: boolean;

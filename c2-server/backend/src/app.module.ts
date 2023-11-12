@@ -1,7 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { MachinesModule } from './machines/machines.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { NestMinioModule } from 'nestjs-minio';
 import { ConfigModule } from '@nestjs/config';
@@ -10,6 +7,10 @@ import { BuilderModule } from './builder/builder.module';
 import { BullModule } from '@nestjs/bull';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+import { GlobalModule } from './global/global.module';
+import { CommandsModule } from './commands/commands.module';
+import { BotsModule } from './bots/bots.module';
+import { IpManagementModule } from './ip-management/ip-management.module';
 
 import * as process from 'process';
 
@@ -42,12 +43,15 @@ import configuration from './config/configuration';
       accessKey: process.env.BUCKET_ACCESS_KEY,
       secretKey: process.env.BUCKET_SECRET_KEY,
     }),
-    MachinesModule,
     BuilderModule,
     AuthModule,
     UsersModule,
+    GlobalModule,
+    BotsModule,
+    CommandsModule,
+    IpManagementModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { BuilderService } from './builder.service';
 import { MachineInfoDto } from './dto/machine-info.dto';
 import { CreateBlacklistEntryDto } from './dto/create-blacklist-entry.dto';
-import { MachineInfo } from './machine.interface';
+import { MachineInfo } from './interfaces/machine.interface';
 
 @Controller('builder')
 export class BuilderController {

@@ -1,12 +1,12 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
-  ManyToOne,
+  Entity,
   JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Machine } from './machine.entity';
+import { Bot } from '../../bots/entities/bot.entity';
 
 @Entity()
 export class Command {
@@ -22,7 +22,11 @@ export class Command {
   @Column({ type: 'varchar', length: 255 })
   name: string;
 
-  @ManyToOne(() => Machine, (machine) => machine.commands)
-  @JoinColumn({ name: 'machineId' })
-  machine: Machine;
+  @ManyToOne(() => Bot, (bot) => bot.commands)
+  @JoinColumn({ name: 'id' })
+  bot: Bot;
+
+  constructor(command: Partial<Command>) {
+    Object.assign(this, command);
+  }
 }

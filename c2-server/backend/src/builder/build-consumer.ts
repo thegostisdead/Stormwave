@@ -5,7 +5,7 @@ import {
   Process,
   Processor,
 } from '@nestjs/bull';
-import { MachineInfo } from './machine.interface';
+import { MachineInfo } from './interfaces/machine.interface';
 import { join, basename } from 'node:path';
 import { exec } from 'child_process';
 import { Inject, Logger } from '@nestjs/common';
@@ -40,7 +40,9 @@ export class BuildConsumer {
 
     const projectRoot = this.configService.get<string>('rootDir');
 
-    const scriptName = isWin ? 'build.bat ${projectRoot}' : `build.sh ${projectRoot}`;
+    const scriptName = isWin
+      ? 'build.bat ${projectRoot}'
+      : `build.sh ${projectRoot}`;
 
     const scriptRoot = this.configService.get<string>('scriptCompile');
 

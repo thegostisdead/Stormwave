@@ -259,3 +259,5 @@ tools/api-simulator/current.json
 malware/stormwave/.idea/
 
 c2-server/web/.idea/
+
+c2-server/backend/test.db

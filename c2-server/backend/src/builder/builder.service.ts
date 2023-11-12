@@ -1,18 +1,20 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
-import { MachineInfo } from './machine.interface';
+import { MachineInfo } from './interfaces/machine.interface';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { Repository } from 'typeorm';
-import { BlacklistedIp } from '../entities/backlisted-ip.entity';
+
 import { createHmac } from 'node:crypto';
 import { UrlRegistry } from '../entities/url-registry.entity';
+import { BlacklistedIp } from '../ip-management/entities/ip-management.entity';
 const SECRET = 'secret';
 
 @Injectable()
 export class BuilderService {
+  private readonly logger = new Logger(BuilderService.name);
   constructor(
     private readonly configService: ConfigService,
     @InjectQueue('build') private buildQueue: Queue,
@@ -57,7 +59,7 @@ export class BuilderService {
   }
 
   async createBlacklist(ip: string) {
-    const blacklistedIp = new BlacklistedIp();
+    const blacklistedIp = new BlacklistedIp(ip);
     blacklistedIp.ip = ip;
     await this.blacklistedIpRepository.save(blacklistedIp);
   }
