@@ -1,1 +1,1 @@
-{"name":"set-pulling-rate","args":{"seconds":20}}
+{"name":"set-relay","args":{"ip":"1.1.1.1"}}
