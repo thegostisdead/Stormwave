@@ -2,7 +2,6 @@ import NextAuth, {NextAuthOptions} from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 export const authOptions: NextAuthOptions  = {
     pages: {
-        signIn: '/login',
         signOut: '/logout',
         error: '/auth/error', // Error code passed in query string as ?error=
     },
@@ -20,7 +19,7 @@ export const authOptions: NextAuthOptions  = {
                     return null;
                 }
 
-                const res = await fetch("http://localhost:3000", {
+                const res = await fetch("http://localhost:5000/", {
                     method: 'POST',
                     body: JSON.stringify(credentials),
                     headers: { "Content-Type": "application/json" }
@@ -38,25 +37,7 @@ export const authOptions: NextAuthOptions  = {
     ],
     debug: process.env.NODE_ENV === 'development',
     callbacks: {
-        async jwt({ token, user, account }) {
-            if (account && user) {
-                return {
-                    ...token,
-                    accessToken: user.token,
-                    refreshToken: user.refreshToken,
-                };
-            }
 
-            return token;
-        },
-
-        async session({ session, token }) {
-            session.user.accessToken = token.accessToken;
-            session.user.refreshToken = token.refreshToken;
-            session.user.accessTokenExpires = token.accessTokenExpires;
-
-            return session;
-        },
     },
 }
 

@@ -59,8 +59,7 @@ export class BuilderService {
   }
 
   async createBlacklist(ip: string) {
-    const blacklistedIp = new BlacklistedIp(ip);
-    blacklistedIp.ip = ip;
+    const blacklistedIp = new BlacklistedIp({ ip: ip });
     await this.blacklistedIpRepository.save(blacklistedIp);
   }
 

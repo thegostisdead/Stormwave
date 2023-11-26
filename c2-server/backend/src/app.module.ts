@@ -15,6 +15,7 @@ import { IpManagementModule } from './ip-management/ip-management.module';
 import * as process from 'process';
 
 import configuration from './config/configuration';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [
@@ -29,6 +30,9 @@ import configuration from './config/configuration';
         password: 'eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81',
       },
     }),
+    MongooseModule.forRoot(
+      'mongodb://root:to99J98oa1xLQCF0@217.76.52.124:27017',
+    ),
     TypeOrmModule.forRoot({
       type: 'sqlite',
       database: 'test.db',

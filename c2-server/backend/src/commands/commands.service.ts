@@ -1,29 +1,39 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { CreateCommandDto } from './dto/create-command.dto';
 import { UpdateCommandDto } from './dto/update-command.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Command } from './entities/command.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class CommandsService {
   private readonly logger = new Logger(CommandsService.name);
 
-  constructor() {}
-  create(createCommandDto: CreateCommandDto) {
-    return 'This action adds a new command';
+  constructor(
+    @InjectRepository(Command)
+    private readonly commandRepository: Repository<Command>,
+  ) {}
+  async create(createCommandDto: CreateCommandDto) {
+    return this.commandRepository.save(createCommandDto);
   }
 
-  findAll() {
-    return `This action returns all commands`;
+  async findAll() {
+    return this.commandRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} command`;
+  async findOne(id: number) {
+    return this.commandRepository.findOne({ where: { id: id } });
   }
 
-  update(id: number, updateCommandDto: UpdateCommandDto) {
-    return `This action updates a #${id} command`;
+  async update(id: number, updateCommandDto: UpdateCommandDto) {
+    return this.commandRepository.update(id, updateCommandDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} command`;
+  async remove(id: number) {
+    return this.commandRepository.delete(id);
+  }
+
+  async removeAll() {
+    return this.commandRepository.clear();
   }
 }

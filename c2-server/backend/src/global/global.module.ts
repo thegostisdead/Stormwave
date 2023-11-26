@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { GlobalController } from './global.controller';
 import { GlobalService } from './global.service';
-import { MachinesModule } from '../machines/machines.module';
+import { BotsModule } from '../bots/bots.module';
 
 @Module({
-  imports: [MachinesModule],
+  imports: [BotsModule],
   controllers: [GlobalController],
   providers: [GlobalService],
 })

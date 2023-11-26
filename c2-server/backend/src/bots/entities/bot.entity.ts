@@ -12,8 +12,17 @@ export class Bot {
   @Column({ type: 'varchar', length: 255 })
   hostname: string;
 
+  @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
+  lastSeen: Date;
+
   @OneToMany(() => Command, (command) => command.bot)
   commands: Command[];
+
+  @Column({ type: 'text', nullable: true })
+  os: string;
+
+  @Column({ type: 'text', nullable: true })
+  arch: string;
 
   constructor(bot: Partial<Bot>) {
     Object.assign(this, bot);
