@@ -36,4 +36,10 @@ export class CommandsService {
   async removeAll() {
     return this.commandRepository.clear();
   }
+
+  async acknowledgeCommand(bot: string, data: any) {
+    this.logger.log(`acknowledgeCommand ${bot} ${data}`);
+
+    // return this.commandRepository.update({ bot: bot }, { data: data });
+  }
 }
