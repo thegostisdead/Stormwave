@@ -3,23 +3,22 @@ package main
 import (
 	"errors"
 	"fmt"
-	"github.com/go-vgo/robotgo"
 	"net"
 	"os"
 	"strings"
 	"syscall"
-	"time"
 	"unsafe"
 )
 
-const (
-	SAMPLING_DELTA = 2
-	SAMPLING_COUNT = 5
-)
-
 var (
-	user32               = syscall.NewLazyDLL("user32.dll")
-	procGetSystemMetrics = user32.NewProc("GetSystemMetrics")
+	/* Hooking */
+	_ = syscall.NewLazyDLL("user32.dll")
+	_ = syscall.NewLazyDLL("kernel32.dll")
+
+	user32                  = syscall.NewLazyDLL("user32.dll")
+	kernel_32               = syscall.MustLoadDLL("kernel32.dll")
+	procGetSystemMetrics    = user32.NewProc("GetSystemMetrics")
+	globalMemoryStatusEx, _ = kernel_32.FindProc("GlobalMemoryStatusEx")
 )
 
 type Pair[T, U any] struct {
@@ -31,6 +30,13 @@ type DiskUsage struct {
 	freeBytes  int64
 	totalBytes int64
 	availBytes int64
+}
+
+type memStatusEx struct {
+	dwLength     uint32
+	dwMemoryLoad uint32
+	ullTotalPhys uint64
+	unused       [6]uint64
 }
 
 // disk usage of path/disk
@@ -66,32 +72,23 @@ func getMacAddr() []string {
 	return address
 }
 
-func isMouseMoving() bool {
+func evadeSystemMemory() {
+	// https://unprotect.it/technique/checking-memory-size/
 
-	// do mouse sampling during few seconds
-	positions := make(chan Pair[int, int])
-	for i := 0; i < SAMPLING_COUNT; i++ {
-		x, y := robotgo.GetMousePos()
-		positions <- Pair[int, int]{x, y}
-		time.Sleep(SAMPLING_DELTA * time.Second)
+	msx := &memStatusEx{dwLength: 64}
+	r, _, _ := globalMemoryStatusEx.Call(uintptr(unsafe.Pointer(msx)))
+	if r == 0 {
+		fmt.Println("Error getting memory status")
 	}
 
-	// check if value change over time
-	// TODO : found a way to detect variation in the channel buffer
-	//for i := 0; i < SAMPLING_COUNT; i++ {
-	//	<-positions
-	//}
-	return true
-}
+	var maxMemory float64 = 2.0
+	var system_memory = float64(msx.ullTotalPhys/1024/1024) / 1024
 
-func getDiskSpace() int {
-	// TODO : get the total disk space of the current drive. If space < 80GB its a sandbox
-
-}
-
-func getRamSpace() int {
-	// https://unprotect.it/technique/checking-memory-size/
-	// TODO: get the RAM info and check if RAM < 4GB, if yes it's a sandbox
+	if system_memory <= maxMemory {
+		fmt.Println("Sandbox detected")
+	} else {
+		fmt.Println("Sandbox not detected")
+	}
 }
 
 func getCPUInfo() {
@@ -126,7 +123,9 @@ func Exists(name string) (bool, error) {
 // detect sandboxes
 func isEnvSandbox() bool {
 
+	evadeSystemMemory()
 	getScreenResolution()
+
 	systemFiles := [...]string{
 		"C:\\Windows\\system32\\drivers\\BoxMouse.sys",
 		"C:\\Windows\\system32\\drivers\\BoxGuest.sys",
