@@ -1,1 +1,1 @@
-{"name":"set-relay","args":{"ip":"1.1.1.1"}}
+{"name":"get-private-ip","args":{"network":"string"}}
