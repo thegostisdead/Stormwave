@@ -1,15 +1,28 @@
 ﻿# T-SEC-901-LYO_13
 
+## StormWave 
+StormWave is our malware. StormWave run like an agent and allow attacker to exec commands. 
 
-## TODO 
-- https://unprotect.it/technique/dll-unhooking/ (Maybe make a dedicated tool)
-- https://unprotect.it/snippet/virtualizationsandbox-evasion-time-based-evasion/203/
-- https://medium.com/@R00tendo/bypassing-all-known-anti-virus-applications-python-meterpreter-919255ecd9d1
-- https://github.com/rapid7/metasploitable3/blob/master/README.md
-## Features 
+### Attack 
 
-## Install 
+1) The attacker use the RemoteMouse Exploit to spawn a shell. 
+An evil powershell script will be downloaded and started. 
 
-## Test 
+2) Powershell script 
+The script will first download a malicious exe file to disable Windows Defender.
+The script also download a malicious DLL file and save it in the System32 folder. This DLL will be automatically loaded at startup time with NT Authority System right. <dllname> allow use to disable the AV and turn off firewall continiously. 
 
-sqdsqdqsd
+The powershell script also install the agent A.K.A Stormware. 
+
+3) StormWave 
+StormWave load a dll to detect sandbox and stop his execution if a sandbox is detected. StormWave try to be persitant everytime. 
+
+### Features
+
+#### Command Execution 
+
+#### Persitance
+
+#### Keylogger 
+
+#### Dump SAM 

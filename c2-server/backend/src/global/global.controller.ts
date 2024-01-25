@@ -1,30 +1,25 @@
-import { Body, Controller, Post, Req } from '@nestjs/common';
+import { Body, Controller, Inject, Post, Req } from '@nestjs/common';
 import { Request } from 'express';
 
 import { WebOrderDto } from './dto/web-order.dto';
 import { GlobalService } from './global.service';
 import { BotsService } from '../bots/bots.service';
+import { IPFILTER_TOKEN, IpFilterService } from 'nestjs-ip-filter';
 
 @Controller('global')
 export class GlobalController {
   constructor(
     private readonly globalService: GlobalService,
-    private readonly botsService: BotsService,
+    @Inject(IPFILTER_TOKEN)
+    private readonly ipFilterService: IpFilterService,
   ) {}
 
   @Post('/')
-  async event(@Body() body: WebOrderDto, @Req() req: Request) {
-    // TODO check if the ip is blacklisted
-
-    try {
-      // check if the machine is in the database
-      await this.botsService.findOne(+body.uuid);
-    } catch (e) {
-      console.log(`Unknown machine ${body.uuid} from ${req.ip}`);
-      return {};
-    }
-
+  async event(@Body() body: any, @Req() req: Request) {
     switch (body.command) {
+      case 'ANNOUNCE':
+        return await this.globalService.announce(body.uuid, req.ip, body.data);
+
       case 'GET_COMMAND':
         return await this.globalService.getCommand(body.uuid);
 
@@ -36,6 +31,7 @@ export class GlobalController {
 
       default:
         console.log(`Unknown command received from ${req.ip}`);
+        break;
     }
   }
 }

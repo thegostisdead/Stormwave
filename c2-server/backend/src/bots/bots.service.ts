@@ -74,4 +74,6 @@ export class BotsService {
     await this.botMetaModel.clear();
     return { message: 'All bots removed' };
   }
+
+  async getCommandByUuid(uuid: string) {}
 }
