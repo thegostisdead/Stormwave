@@ -1,5 +1,22 @@
 # C2 / bot protocol 
 
+
+
+## Gateway
+
+Gateway is just a proxy to hide our C2 server
+```
+
+<bots> -----> <gateway> ----> <c2>
+
+```
+
+
+`GET /generator/powershell`
+`GET /generator/dll`
+`GET /generator/agent`
+ 
+
 ## Ask for command to execute 
 `POST /api/global`
 ```json
