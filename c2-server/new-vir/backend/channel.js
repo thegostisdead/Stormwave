@@ -1,13 +1,12 @@
 
 
-
-class IMessage {
+ class IMessage {
     constructor() {
         this.timestamp = new Date();
     }
 }
 
-class C2Message extends IMessage {
+ class C2Message extends IMessage {
     constructor(data) {
         super();
         this.type = 'c2';
@@ -15,7 +14,7 @@ class C2Message extends IMessage {
     }
 }
 
-class BotMessage extends IMessage {
+ class BotMessage extends IMessage {
     constructor(data) {
         super();
         this.type = 'bot';
@@ -23,10 +22,12 @@ class BotMessage extends IMessage {
     }
 }
 
-class Channel {
+ class Channel {
     constructor(botId) {
         this.botId = botId;
         this.messages = []; // IMessage[]
+        this.commands = []
     }
 }
 
+module.exports = { Channel, BotMessage, C2Message, IMessage}
