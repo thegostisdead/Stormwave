@@ -5,8 +5,87 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="54342b10-1c4d-4186-99b9-c4d177452e00" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../backend/uploads/audio-1706638887877-main.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../malware/stormwave/bin/main-windows.exe" beforeDir="false" afterPath="$PROJECT_DIR$/../../../malware/stormwave/bin/main-windows.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/.dockerignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/.eslintrc.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/.prettierrc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/.sample.env" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/Dockerfile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/nest-cli.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/pnpm-lock.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/app.module.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/auth/auth.controller.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/auth/auth.guard.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/auth/auth.module.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/auth/auth.service.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/auth/constants.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/bots/bots.controller.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/bots/bots.module.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/bots/bots.service.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/bots/dto/create-bot.dto.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/bots/dto/update-bot.dto.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/bots/entities/bot.entity.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/bots/interfaces/bot.interface.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/bots/schemas/bot-metadata.schema.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/builder/build-consumer.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/builder/builder.controller.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/builder/builder.module.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/builder/builder.service.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/builder/dto/create-blacklist-entry.dto.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/builder/dto/machine-info.dto.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/builder/interfaces/machine.interface.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/commands/commands.controller.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/commands/commands.module.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/commands/commands.service.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/commands/commands.service.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/commands/dto/create-command.dto.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/commands/dto/update-command.dto.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/commands/entities/command.entity.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/commands/interfaces/command.interface.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/config/configuration.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/entities/url-registry.entity.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/global/dto/web-order.dto.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/global/global.controller.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/global/global.module.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/global/global.service.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/ip-management/dto/create-ip-management.dto.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/ip-management/dto/update-ip-management.dto.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/ip-management/entities/ip-management.entity.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/ip-management/ip-management.controller.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/ip-management/ip-management.module.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/ip-management/ip-management.service.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/ip-management/ip-management.service.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/main.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/test-utils/InMemoryTestingModule.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/test-utils/testCommand.seed.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/users/users.module.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/users/users.service.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/test/app.e2e-spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/test/jest-e2e.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/tsconfig.build.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/tsconfig.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/users.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../new-vir/backend/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../new-vir/backend/.idea/backend.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../new-vir/backend/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../new-vir/backend/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../new-vir/backend/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../new-vir/backend/app.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../new-vir/backend/channel.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../new-vir/backend/commands.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../new-vir/backend/logger.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../new-vir/backend/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../new-vir/backend/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../new-vir/web.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/bots/[id]/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/bots/[id]/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../malware/stormwave/command.go" beforeDir="false" afterPath="$PROJECT_DIR$/../../malware/stormwave/command.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../malware/stormwave/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/../../malware/stormwave/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../malware/stormwave/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/../../malware/stormwave/go.sum" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../malware/stormwave/sudo.go" beforeDir="false" afterPath="$PROJECT_DIR$/../../malware/stormwave/sudo.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../malware/stormwave/tools.go" beforeDir="false" afterPath="$PROJECT_DIR$/../../malware/stormwave/tools.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -14,7 +93,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../.." />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -27,23 +106,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Dorian/Documents/dev/T-SEC-901-LYO_13/c2-server/new-vir/web&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;pnpm&quot;,
-    &quot;npm.dev.executor&quot;: &quot;Run&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\Dorian\\Documents\\dev\\T-SEC-901-LYO_13\\c2-server\\new-vir\\web\\node_modules\\typescript\\lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/Users/Dorian/Documents/dev/T-SEC-901-LYO_13/c2-server/new-vir/web",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "pnpm",
+    "npm.dev.executor": "Run",
+    "ts.external.directory.path": "C:\\Users\\Dorian\\Documents\\dev\\T-SEC-901-LYO_13\\c2-server\\web\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="dev" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
       <package-json value="$PROJECT_DIR$/package.json" />
@@ -72,6 +151,7 @@
       <workItem from="1705341720090" duration="1348000" />
       <workItem from="1706562954111" duration="2284000" />
       <workItem from="1706725149684" duration="6713000" />
+      <workItem from="1706807190639" duration="4006000" />
     </task>
     <servers />
   </component>
