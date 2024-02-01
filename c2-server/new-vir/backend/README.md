@@ -14,6 +14,7 @@
 | OpenTunnel       |        |      |
 | InstallTunnel    |        |      |
 | InstallIpScanner |        |      |
+| InstallPython    |        |      |
 | GetSysInfo       |        |      |
 | Ping             |   ✔️   |      |
 | Wifi             |        |      |
