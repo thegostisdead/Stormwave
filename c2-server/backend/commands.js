@@ -113,6 +113,8 @@ class NetworkScan extends Command {
   constructor(props) {
     super(props);
     this.name = "NetworkScan";
+    this.startIPv4Address = props.startIPv4Address;
+    this.endIPv4Address = props.endIPv4Address;
   }
 }
 class Ddos extends Command {

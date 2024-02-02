@@ -218,12 +218,19 @@ export default function BotDetailPage() {
     }
 
     async function handleNetworkScan() {
-        const res =  await sendCommand(currentBot, "NetworkScan", {})
+        const res =  await sendCommand(currentBot, "NetworkScan", {
+            startIPv4Address: startIp,
+            endIPv4Address: endIp
+        })
+        setStartIp("")
+        setEndIp("")
         commandSent()
     }
 
     async function handleCmd() {
-        const res =  await sendCommand(currentBot, "RunCommand", {})
+        const res =  await sendCommand(currentBot, "RunCommand", {
+            command: command
+        })
         setCommand("")
         commandSent()
     }

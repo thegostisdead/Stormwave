@@ -17,6 +17,7 @@ const {
   NetworkMove,
   GetKeyboardData,
   InstallPython,
+  InstallIpScanner,
   PowershellAdmin,
   RunCommand,
   SetPullingRate,
@@ -199,7 +200,10 @@ function sendCommand(command) {
 
     case "NetworkScan":
       logger.info("Adding NetworkScan command");
-      const networkScanCommand = new NetworkScan();
+      const networkScanCommand = new NetworkScan({
+        startIPv4Address: command.args.startIPv4Address,
+        endIPv4Address: command.args.endIPv4Address,
+      });
       targetChannel.commands.push(networkScanCommand);
       break;
 
@@ -239,9 +243,8 @@ function sendCommand(command) {
       break;
     case "InstallIpScanner":
       logger.info("Adding InstallIpScanner command");
-      break;
-    case "SetRelay":
-      logger.info("Adding SetRelay command");
+      const installIpScannerCommand = new InstallIpScanner();
+      targetChannel.commands.push(installIpScannerCommand);
       break;
   }
 }
