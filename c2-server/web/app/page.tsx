@@ -12,7 +12,7 @@ export default function Home() {
     const [bots, setBots] = useState([]);
     const [loading, setLoading] = useState(true);
   async function getBots() {
-    const url = "http://10.0.0.24:3000/backend/bots";
+    const url = "http://localhost:4000/backend/bots";
     setLoading(true)
     const res = await fetch(url);
     const data = await res.json();

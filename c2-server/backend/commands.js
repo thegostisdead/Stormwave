@@ -132,14 +132,14 @@ class SetPullingRate extends Command {
   constructor(props) {
     super(props);
     this.name = "SetPullingRate";
-    this.rate = props.rate;
+    this.seconds = props.seconds;
   }
 }
 class Gateway extends Command {
   constructor(props) {
     super(props);
     this.name = "SetRelay";
-    this.url = props.url;
+    this.ip = props.ip;
   }
 }
 

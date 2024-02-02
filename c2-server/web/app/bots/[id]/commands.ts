@@ -1,8 +1,8 @@
 
-const backendUrl = "http://10.0.0.24:3000/backend";
+const backendUrl = "http://localhost:4000/backend";
 
 
-async function sendCommand(botId: string, commandName: string, commandData: any) {
+export async function sendCommand(botId: string, commandName: string, commandData: any) {
 
     if (botId === undefined || botId === null) {
         throw new Error("botId is required");
