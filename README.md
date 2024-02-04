@@ -2,6 +2,8 @@
 
 ## StormWave 
 StormWave is our malware. StormWave run like an agent and allow attacker to exec commands. 
+![arch](assets/arch.png)
+
 
 ### Attack 
 
@@ -19,10 +21,11 @@ StormWave load a dll to detect sandbox and stop his execution if a sandbox is de
 
 ### Features
 
+
 #### Command Execution 
+
 
 #### Persitance
 
-#### Keylogger 
 
-#### Dump SAM 
+#### Keylogger 

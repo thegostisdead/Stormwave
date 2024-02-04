@@ -20,11 +20,11 @@
 | RunCommand       |   ✔️   |                                  command:string |                    x |             x |                   yes |
 | PowershellAdmin  |   ✔️   |                                  command:string |                    x |             x |                   yes |
 | InstallIpScanner |   ✔️   |                                                 |                    x |             x |                   yes |
+| InstallPython    |  ✔️    |                                                 |                    x |             x |                   yes |
 | DownloadFile     |        |                                                 |                    x |             x |                   yes |
 | NetworkScan      |        | startIPv4Address:string ; endIPv4Address:string |                    x |             x |                   yes |
 | UploadFile       |        |                                                 |                    x |             x |                   yes |
 | AudioCapture     |        |                                                 |                    x |             x |                   yes |
-| InstallPython    |        |                                                 |                    x |             x |                   yes |
 | InstallStealer   |        |                                                 |                    x |             x |                   yes |
 
 
