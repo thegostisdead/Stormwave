@@ -1,5 +1,5 @@
 
-const backendUrl = "http://localhost:4000/backend";
+const backendUrl = "http://localhost:3000/backend";
 
 
 export async function sendCommand(botId: string, commandName: string, commandData: any) {

