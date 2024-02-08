@@ -167,6 +167,14 @@ class InstallIpScanner extends Command {
   }
 }
 
+
+class StealCredentials extends Command {
+  constructor(props) {
+    super(props);
+    this.name = "StealCredentials";
+  }
+}
+
 module.exports = {
   Command,
   SetPullingRate,
@@ -191,4 +199,5 @@ module.exports = {
   DownloadFile,
   InstallStealer,
   Wifi,
+  StealCredentials
 };
