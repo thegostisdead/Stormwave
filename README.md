@@ -7,7 +7,7 @@ StormWave is our malware. StormWave run like an agent and allow attacker to exec
 
 ### Attack 
 
-1) The attacker use the RemoteMouse Exploit to spawn a shell. 
+1) The attacker use the [RemoteMouse Exploit](https://github.com/p0dalirius/RemoteMouse-3.008-Exploit) to spawn a shell. 
 An evil powershell script will be downloaded and started. 
 
 2) Powershell script 
@@ -17,15 +17,59 @@ The script also download a malicious DLL file and save it in the System32 folder
 The powershell script also install the agent A.K.A Stormware. 
 
 3) StormWave 
-StormWave load a dll to detect sandbox and stop his execution if a sandbox is detected. StormWave try to be persitant everytime. 
+StormWave detect sandbox and stop his execution if a sandbox is detected. StormWave try to be persitant everytime. 
 
 ### Features
+- sandbox detection 
+- screenshot
+- record audio 
+- upload file 
+- send file 
+- ping 
+- ddos
+- get uuid 
+- get private ip 
+- get public ip 
+- get wifi password 
+- password stealer 
+- persistence
+- zip file 
+- update config 
+- windows registry
 
 
-#### Command Execution 
+### How to run
+Node js v19 is required. 
+
+#### Frontend
+```bash
+cd Stormwave/c2-server/web
+npm install 
+npm run dev 
+```
+
+#### Backend
+You can change the opened port.
+```bash
+cd Stormwave/c2-server/backend
+npm install 
+npm run dev 4000
+```
+
+#### Malware
+Change the gateway ip in `configuration.go`.
+You need golang and make.
+```bash
+cd Stormwave/malware/stormwave
+make compile # make compile-debug if you want a debug version
+```
+The output bin is under /bin
 
 
-#### Persitance
+# Used tools
+- [PowerShell_IPv4NetworkScanner](https://github.com/BornToBeRoot/PowerShell_IPv4NetworkScanner)
 
 
-#### Keylogger 
+# Sources : 
+- [Coldfire](https://github.com/redcode-labs/Coldfire)
+- [GoKeylogger](https://github.com/Faeris95/GoKeylogger/)
